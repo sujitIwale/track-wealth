@@ -1,8 +1,4 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+@import "tailwindcss";
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -13,4 +9,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @apply text-gray-950;
 }

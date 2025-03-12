@@ -1,11 +1,11 @@
 import "./App.css";
-import Header from "./components/layout";
+import { AppLayout } from "./components/layout";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
-    </div>
+    <AppLayout>
+      <div></div>
+    </AppLayout>
   );
 }
 
