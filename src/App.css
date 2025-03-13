@@ -1,0 +1,7 @@
+.bg-gradient-bottom-corners {
+    background-image: linear-gradient(to top left, rgba(173, 216, 230, 0.5), rgba(255, 182, 193, 0.5) 50%), 
+                      linear-gradient(to top right, rgba(173, 216, 230, 0.5), rgba(255, 182, 193, 0.5) 50%);
+    background-size: 50% 50%;
+    background-position: bottom left, bottom right;
+    background-repeat: no-repeat;
+  }

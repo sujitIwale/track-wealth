@@ -1,37 +1,87 @@
 import React from "react";
-import { FaHome, FaExchangeAlt, FaWallet, FaCog } from "react-icons/fa";
+import { NavLink } from "react-router";
+import IconButton from "../../common/IconButton/IconButton";
+import {
+  IoIosSettings,
+  IoIosSwap,
+  IoIosWallet,
+  IoMdAdd,
+  IoMdHome,
+} from "react-icons/io";
 
 interface NavItem {
+  id: string;
   name: string;
-  href: string;
+  href?: string;
   icon: React.ReactElement;
+  type: "button" | "link";
 }
 
 const navItems: NavItem[] = [
-  { name: "Dashboard", href: "/dashboard", icon: <FaHome size={24} /> },
+  {
+    name: "Dashboard",
+    id: "dashboard",
+    href: "/dashboard",
+    icon: <IoMdHome size={28} />,
+    type: "link",
+  },
   {
     name: "Transactions",
+    id: "transactions",
     href: "/transactions",
-    icon: <FaExchangeAlt size={24} />,
+    icon: <IoIosSwap size={28} />,
+    type: "link",
   },
-  { name: "Budget", href: "/budget", icon: <FaWallet size={24} /> },
-  { name: "Settings", href: "/settings", icon: <FaCog size={24} /> },
+  {
+    name: "Add Expense",
+    id: "add-expense",
+    icon: <IoMdAdd size={28} />,
+    type: "button",
+  },
+  {
+    name: "Budget",
+    id: "budget",
+    href: "/budget",
+    icon: <IoIosWallet size={28} />,
+    type: "link",
+  },
+  {
+    name: "Settings",
+    id: "settings",
+    href: "/settings",
+    icon: <IoIosSettings size={28} />,
+    type: "link",
+  },
 ];
 
 const StickyFooter: React.FC = () => {
   return (
-    <footer className="bg-white shadow-inner">
-      <nav className="max-w-md mx-auto px-4 py-3 flex justify-between">
-        {navItems.map((item, index) => (
-          <a
-            key={index}
-            href={item.href}
-            className="flex flex-col items-center text-gray-600 hover:text-blue-500 transition-colors"
-          >
-            {item.icon}
-            <span className="text-xs mt-1">{item.name}</span>
-          </a>
-        ))}
+    <footer className="bg-white shadow-inner rounded-tl-xl rounded-tr-xl">
+      <nav className="max-w-md mx-auto px-5 py-4 flex justify-between items-center">
+        {navItems.map((item, index) => {
+          if (item.type === "link") {
+            return (
+              <NavLink
+                key={index}
+                to={item.href!}
+                // Apply a dark color if active, light otherwise
+                className={({ isActive }: { isActive: boolean }) =>
+                  isActive ? "text-gray-900" : "text-gray-400"
+                }
+              >
+                {item.icon}
+              </NavLink>
+            );
+          }
+          return (
+            <IconButton
+              key={index}
+              className="p-3 bg-amber-600 text-white"
+              icon={item.icon}
+              onClick={() => {}}
+            />
+          );
+        })}
       </nav>
     </footer>
   );
