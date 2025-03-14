@@ -8,6 +8,8 @@ import {
   IoMdAdd,
   IoMdHome,
 } from "react-icons/io";
+import { useAppDispatch } from "../../../store/store";
+import { setTransactionModal } from "../../../store/slices/uiSlice";
 
 interface NavItem {
   id: string;
@@ -55,6 +57,7 @@ const navItems: NavItem[] = [
 ];
 
 const StickyFooter: React.FC = () => {
+  const dispatch = useAppDispatch();
   return (
     <footer className="bg-white shadow-inner rounded-tl-xl rounded-tr-xl">
       <nav className="max-w-md mx-auto px-5 py-4 flex justify-between items-center">
@@ -65,7 +68,7 @@ const StickyFooter: React.FC = () => {
                 key={index}
                 to={item.href!}
                 // Apply a dark color if active, light otherwise
-                className={({ isActive }: { isActive: boolean }) =>
+                className={({ isActive }) =>
                   isActive ? "text-gray-900" : "text-gray-400"
                 }
               >
@@ -78,7 +81,7 @@ const StickyFooter: React.FC = () => {
               key={index}
               className="p-3 bg-amber-600 text-white"
               icon={item.icon}
-              onClick={() => {}}
+              onClick={() => dispatch(setTransactionModal({ open: true }))}
             />
           );
         })}

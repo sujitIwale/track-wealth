@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import StickyFooter from "../BottomNav/BottomNav";
 import Header from "../Header/Header";
+import AddExpense from "../../AddExpense/AddExpense";
 
 const AppLayout = () => {
   return (
@@ -14,6 +15,8 @@ const AppLayout = () => {
         </main>
         <StickyFooter />
       </div>
+
+      <AddExpense />
     </div>
   );
 };

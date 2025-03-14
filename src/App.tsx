@@ -1,8 +1,13 @@
 import "./App.css";
+import MainProvider from "./providers/MainProvider";
 import { Router } from "./router";
 
 function App() {
-  return <Router />;
+  return (
+    <MainProvider>
+      <Router />
+    </MainProvider>
+  );
 }
 
 export default App;
