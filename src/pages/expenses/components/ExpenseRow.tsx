@@ -16,6 +16,7 @@ import {
 import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { IoEllipsisVertical } from "react-icons/io5";
+import { useNavigate } from "react-router";
 
 type ExpenseRowProps = {
   expense: Expense;
@@ -46,6 +47,7 @@ const getCategoryIcon = (category: string) => {
 };
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({ expense }) => {
+  const navigate = useNavigate();
   const { id, amount, name, comment, category } = expense;
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -93,7 +95,16 @@ const ExpenseRow: React.FC<ExpenseRowProps> = ({ expense }) => {
             <span className="sr-only">Toggle menu</span>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" side="bottom">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                navigate({
+                  pathname: "/expense",
+                  search: `?expenseId=${id}`,
+                })
+              }
+            >
+              Edit
+            </DropdownMenuItem>
             <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

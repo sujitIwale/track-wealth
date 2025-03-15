@@ -1,31 +1,58 @@
 import Modal from "../common/Modal/Modal";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { setTransactionModal } from "../../store/slices/uiSlice";
 import IconButton from "../common/IconButton/IconButton";
 import { IoClose } from "react-icons/io5";
 import Typography from "../common/Typography/Typography";
-import Button from "../common/Button/Button";
 import { expensesApi } from "../../api/expense";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AmountInput from "../AmountInput/AmountInput";
 import { STATUS } from "../../types/common";
 import { ExpenseBase } from "../../types/expense";
 import { toast } from "sonner";
 import CategorySelector from "./components/CategorySelector";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
   name: "",
   category: "food",
   comment: "",
+  date: new Date(),
 };
 
-const AddExpense = () => {
+type AddExpenseProps = {
+  expenseId?: string | null;
+  open?: boolean;
+  onClose?: () => void;
+};
+
+const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
   const [expense, setExpense] = useState<ExpenseBase>(initialExpense);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
 
-  const { open } = useAppSelector((store) => store.ui.addTransactionModal);
-  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (expenseId) {
+      expensesApi.getExpense(expenseId).then((_expense) => {
+        if (_expense) {
+          setExpense({
+            amount: _expense.amount,
+            name: _expense.name,
+            category: _expense.category,
+            comment: _expense.comment,
+            date: new Date(_expense.createdAt),
+          });
+        }
+      });
+    }
+  }, [expenseId]);
 
   const handleChange = (
     key: keyof ExpenseBase,
@@ -35,14 +62,18 @@ const AddExpense = () => {
   };
 
   const handleClose = () => {
-    dispatch(setTransactionModal({ open: false }));
+    onClose?.();
     setExpense(initialExpense);
   };
 
   const handleSave = async () => {
     try {
       setStatus(STATUS.LOADING);
-      await expensesApi.createExpense(expense);
+      if (expenseId) {
+        await expensesApi.updateExpense(expenseId, expense);
+      } else {
+        await expensesApi.createExpense(expense);
+      }
       handleClose();
       toast.success("Expense created successfully");
     } catch (error: unknown) {
@@ -54,7 +85,7 @@ const AddExpense = () => {
 
   return (
     <Modal
-      isOpen={open}
+      isOpen={open ?? false}
       onClose={handleClose}
       showCloseButton={false}
       size="full"
@@ -65,11 +96,11 @@ const AddExpense = () => {
           Add Expense
         </Typography>
         <Button
-          variant="text"
+          variant="link"
           onClick={handleSave}
-          loading={status === STATUS.LOADING}
+          disabled={status === STATUS.LOADING}
         >
-          save
+          {status === STATUS.LOADING ? "Saving..." : "Save"}
         </Button>
       </Modal.Header>
       <Modal.Body className="flex flex-col gap-4 p-4">
@@ -88,6 +119,37 @@ const AddExpense = () => {
             value={expense.name}
             onChange={(e) => handleChange("name", e.target.value)}
           />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Typography variant="body2" color="secondary">
+            Date
+          </Typography>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !expense.date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {expense.date ? (
+                  format(expense.date, "PPP")
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={expense.date}
+                onSelect={(date) => date && handleChange("date", date)}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="flex flex-col gap-1">
           <Typography variant="body2" color="secondary">

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import IconButton from "../../common/IconButton/IconButton";
 import {
   IoIosSettings,
@@ -8,8 +8,6 @@ import {
   IoMdAdd,
   IoMdHome,
 } from "react-icons/io";
-import { useAppDispatch } from "../../../store/store";
-import { setTransactionModal } from "../../../store/slices/uiSlice";
 
 interface NavItem {
   id: string;
@@ -57,9 +55,10 @@ const navItems: NavItem[] = [
 ];
 
 const StickyFooter: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   return (
-    <footer className="bg-white shadow-inner rounded-tl-xl rounded-tr-xl">
+    <footer className="bg-white shadow-accent">
       <nav className="max-w-md mx-auto px-5 py-4 flex justify-between items-center">
         {navItems.map((item, index) => {
           if (item.type === "link") {
@@ -81,7 +80,9 @@ const StickyFooter: React.FC = () => {
               key={index}
               className="p-3 bg-amber-600 text-white"
               icon={item.icon}
-              onClick={() => dispatch(setTransactionModal({ open: true }))}
+              onClick={() => {
+                navigate("/expense");
+              }}
             />
           );
         })}

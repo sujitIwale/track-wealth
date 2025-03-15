@@ -6,9 +6,9 @@ import { Toaster } from "@/components/ui/sonner";
 
 const AppLayout = () => {
   return (
-    <div className="flex justify-center min-h-screen bg-gray-200">
+    <div className="flex justify-center min-h-screen">
       {/* Centered container with fixed viewport height */}
-      <div className="w-full max-w-md h-screen flex flex-col bg-gradient-to-t from-blue-100 to-transparent">
+      <div className="w-full max-w-md h-screen flex flex-col">
         <Header />
         {/* Main content scrolls while header/footer remain in view */}
         <main className="flex-grow overflow-y-auto">

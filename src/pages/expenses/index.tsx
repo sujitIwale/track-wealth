@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { useEffect } from "react";
-import { expensesApi } from "../../api/expense";
 import { Expense } from "../../types/expense";
 import ExpenseRow from "./components/ExpenseRow";
 import Typography from "@/components/common/Typography/Typography";
@@ -15,7 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { expensesThunks } from "@/store/thunks/expenses";
+import StateRenderer from "@/components/layout/StateRenderer/StateRenderer";
+import { STATUS } from "@/types/common";
+import Spinner from "@/components/common/Spinner/Spinner";
 interface ExpenseGroup {
   date: string;
   expenses: Expense[];
@@ -29,18 +32,20 @@ interface Filters {
 }
 
 const Expenses = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [filters, setFilters] = useState<Filters>({
     month: "all",
     // year: "all",
     category: "all",
   });
 
+  const dispatch = useAppDispatch();
+  const { expenses, expenseStatus } = useAppSelector((state) => state.data);
+
   useEffect(() => {
-    expensesApi.getExpenses().then((data) => {
-      setExpenses(data);
-    });
-  }, []);
+    dispatch(expensesThunks.fetchAllExpenses());
+  }, [dispatch]);
+
+  console.log({ expenses });
 
   const groupedExpenses = useMemo(() => {
     const filteredExpenses = expenses.filter((expense) => {
@@ -84,118 +89,103 @@ const Expenses = () => {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="sticky top-0 z-10  p-4 bg-white">
-        <div className="flex gap-4 items-center">
-          <Select
-            value={filters.month}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, month: value }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select month" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">All Months</SelectItem>
-                {Array.from({ length: 12 }, (_, i) => (
-                  <SelectItem key={i} value={i.toString()}>
-                    {new Date(2000, i).toLocaleString("default", {
-                      month: "long",
-                    })}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          {/* <Select
-            value={filters.year}
-            onValueChange={(value) =>
-              setFilters((prev) => ({ ...prev, year: value }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select year" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">All Years</SelectItem>
-                {Array.from({ length: 5 }, (_, i) => {
-                  const year = new Date().getFullYear() - i;
-                  return (
-                    <SelectItem key={year} value={year.toString()}>
-                      {year}
-                    </SelectItem>
-                  );
-                })}
-              </SelectGroup>
-            </SelectContent>
-          </Select> */}
-
-          <Select
-            value={filters.category}
-            onValueChange={(value: Category | "all") =>
-              setFilters((prev) => ({ ...prev, category: value }))
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="all">All Categories</SelectItem>
-                {Object.entries(Categories).map(([id, category]) => (
-                  <SelectItem key={id} value={id}>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={clearFilters}
-            className="h-10 w-10"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+    <StateRenderer
+      isLoading={expenseStatus === STATUS.LOADING}
+      isSuccess={expenseStatus === STATUS.SUCCESS}
+      isFailure={expenseStatus === STATUS.ERROR}
+      LayoutWrapper={({ children }) => children}
+      default={() => <div>No expenses found</div>}
+      loading={() => (
+        <div className="flex justify-center items-center h-full">
+          <Spinner />
         </div>
-      </div>
+      )}
+      success={() => (
+        <div className="flex flex-col">
+          <div className="sticky top-0 z-10  p-4 bg-white">
+            <div className="flex gap-4 items-center">
+              <Select
+                value={filters.month}
+                onValueChange={(value) =>
+                  setFilters((prev) => ({ ...prev, month: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select month" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="all">All Months</SelectItem>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <SelectItem key={i} value={i.toString()}>
+                        {new Date(2000, i).toLocaleString("default", {
+                          month: "long",
+                        })}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <Select
+                value={filters.category}
+                onValueChange={(value: Category | "all") =>
+                  setFilters((prev) => ({ ...prev, category: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {Object.entries(Categories).map(([id, category]) => (
+                      <SelectItem key={id} value={id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
-      {groupedExpenses.map((group) => (
-        <div
-          key={group.date}
-          className="flex flex-col gap-2 bg-white border border-gray-200 overflow-hidden"
-        >
-          <div className="flex justify-between items-center py-3 px-4 bg-gray-50 border-b border-gray-200">
-            <Typography variant="h6" className="text-gray-700">
-              {group.date}
-            </Typography>
-            <Typography
-              variant="body1"
-              className={`font-medium ${
-                group.total < 0 ? "text-red-600" : "text-green-600"
-              }`}
+              <Button variant="outline" onClick={clearFilters}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+
+          {groupedExpenses.map((group) => (
+            <div
+              key={group.date}
+              className="flex flex-col gap-2 bg-white  border-gray-200 overflow-hidden"
             >
-              {new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-              }).format(group.total)}
-            </Typography>
-          </div>
+              <div className="flex justify-between items-center py-3 px-4 bg-gray-50 border-b border-gray-200">
+                <Typography variant="h6" className="text-gray-700">
+                  {group.date}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  className={`font-medium ${
+                    group.total < 0 ? "text-red-600" : "text-green-600"
+                  }`}
+                >
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(group.total)}
+                </Typography>
+              </div>
 
-          <div className="flex flex-col">
-            {group.expenses.map((expense) => (
-              <ExpenseRow key={expense.id} expense={expense} />
-            ))}
-          </div>
+              <div className="flex flex-col">
+                {group.expenses.map((expense) => (
+                  <ExpenseRow key={expense.id} expense={expense} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+      failure={() => <div>Error loading expenses</div>}
+    />
   );
 };
 

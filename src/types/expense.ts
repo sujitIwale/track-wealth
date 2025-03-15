@@ -6,6 +6,7 @@ export type ExpenseBase = {
   name: string;
   category: Category;
   comment?: string;
+  date: Date;
 };
 
 export type Expense = ExpenseBase & {
