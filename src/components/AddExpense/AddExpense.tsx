@@ -1,6 +1,4 @@
 import Modal from "../common/Modal/Modal";
-import IconButton from "../common/IconButton/IconButton";
-import { IoClose } from "react-icons/io5";
 import Typography from "../common/Typography/Typography";
 import { expensesApi } from "../../api/expense";
 import { useEffect, useState } from "react";
@@ -16,9 +14,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import expensesThunks from "@/store/thunks/expenses";
+import { useAppDispatch } from "@/store/store";
+import Spinner from "../common/Spinner/Spinner";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
@@ -37,6 +38,7 @@ type AddExpenseProps = {
 const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
   const [expense, setExpense] = useState<ExpenseBase>(initialExpense);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (expenseId) {
@@ -70,7 +72,9 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
     try {
       setStatus(STATUS.LOADING);
       if (expenseId) {
-        await expensesApi.updateExpense(expenseId, expense);
+        await dispatch(
+          expensesThunks.updateExpense({ id: expenseId, expense })
+        );
       } else {
         await expensesApi.createExpense(expense);
       }
@@ -91,16 +95,24 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
       size="full"
     >
       <Modal.Header className="flex items-center gap-2 py-4 px-2">
-        <IconButton icon={<IoClose size={24} />} onClick={handleClose} />
-        <Typography variant="h5" className="pl-7">
+        <Button variant="ghost" size="icon" onClick={handleClose}>
+          <X />
+        </Button>
+        <Typography variant="h6" className="pl-7">
           Add Expense
         </Typography>
         <Button
-          variant="link"
+          size="icon"
+          variant="ghost"
           onClick={handleSave}
           disabled={status === STATUS.LOADING}
+          className="w-10 h-10"
         >
-          {status === STATUS.LOADING ? "Saving..." : "Save"}
+          {status === STATUS.LOADING ? (
+            <Spinner />
+          ) : (
+            <Check className="w-6 h-6" />
+          )}
         </Button>
       </Modal.Header>
       <Modal.Body className="flex flex-col gap-4 p-4">

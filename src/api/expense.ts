@@ -20,6 +20,12 @@ export  const expensesApi = {
     );
     return response.data;
   },
+  deleteExpense: async (id: string) => {
+    const response = await client.delete<Response<Expense>>(
+      `/expense/delete/${id}`
+    );
+    return response.data;
+  },
   getExpenses: async () => {
     const response = await client.get<Response<Expense[]>>(
       "/expense/all"

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { expensesThunks, updateExpense } from "../thunks/expenses";
+import expensesThunks from "../thunks/expenses";
 import { Expense } from "@/types/expense";
 import { STATUS } from "@/types/common";
 
@@ -28,8 +28,11 @@ const dataSlice = createSlice({
         builder.addCase(expensesThunks.fetchAllExpenses.rejected, (state) => {
             state.expenseStatus = STATUS.ERROR;
         });
-        builder.addCase(updateExpense.fulfilled, (state, action) => {
+        builder.addCase(expensesThunks.updateExpense.fulfilled, (state, action) => {
             state.expenses = state.expenses.map((expense) => expense.id === action.payload.data.id ? action.payload.data : expense);
+        });
+        builder.addCase(expensesThunks.deleteExpense.fulfilled, (state, action) => {
+            state.expenses = state.expenses.filter((expense) => expense.id !== action.payload.data.id);
         });
     }
 });

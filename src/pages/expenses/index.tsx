@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { useEffect } from "react";
 import { Expense } from "../../types/expense";
-import ExpenseRow from "./components/ExpenseRow";
+import ExpenseRow from "./components/ExpenseRow/ExpenseRow";
 import Typography from "@/components/common/Typography/Typography";
 import { Categories, Category } from "@/constants/expense";
 import { X } from "lucide-react";
@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { expensesThunks } from "@/store/thunks/expenses";
+import expensesThunks from "@/store/thunks/expenses";
 import StateRenderer from "@/components/layout/StateRenderer/StateRenderer";
 import { STATUS } from "@/types/common";
 import Spinner from "@/components/common/Spinner/Spinner";

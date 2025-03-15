@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> & {
       onClick={onClose} // Click outside to close
     >
       <div
-        className={`${containerClasses} mt-auto md:mt-0 bg-white relative rounded-t-lg md:rounded-lg transition-transform duration-300 transform ${className}`}
+        className={`${containerClasses} mt-auto md:mt-0 bg-white relative md:rounded-lg transition-transform duration-300 transform ${className}`}
         onClick={(e) => e.stopPropagation()} // Prevent clicks inside from closing
       >
         {showCloseButton ? (
