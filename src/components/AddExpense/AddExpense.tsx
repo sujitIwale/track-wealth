@@ -20,11 +20,12 @@ import { Button } from "../ui/button";
 import expensesThunks from "@/store/thunks/expenses";
 import { useAppDispatch } from "@/store/store";
 import Spinner from "../common/Spinner/Spinner";
-
+import AccountSelector from "./components/AccountSelector";
 const initialExpense: ExpenseBase = {
   amount: 0,
   name: "",
   category: "food",
+  accountType: "cash",
   comment: "",
   date: new Date(),
 };
@@ -48,6 +49,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
             amount: _expense.amount,
             name: _expense.name,
             category: _expense.category,
+            accountType: _expense.accountType,
             comment: _expense.comment,
             date: new Date(_expense.createdAt),
           });
@@ -116,6 +118,16 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
         </Button>
       </Modal.Header>
       <Modal.Body className="flex flex-col gap-4 p-4">
+        <div className="flex items-center gap-2">
+          <CategorySelector
+            value={expense.category}
+            onValueChange={(val) => handleChange("category", val)}
+          />
+          <AccountSelector
+            value={expense.accountType}
+            onValueChange={(val) => handleChange("accountType", val)}
+          />
+        </div>
         <AmountInput
           value={expense.amount}
           onChange={(val) => handleChange("amount", val)}
@@ -163,7 +175,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="flex flex-col gap-1">
+        {/* <div className="flex flex-col gap-1">
           <Typography variant="body2" color="secondary">
             Category
           </Typography>
@@ -171,7 +183,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
             value={expense.category}
             onValueChange={(val) => handleChange("category", val)}
           />
-        </div>
+        </div> */}
         <div className="flex flex-col gap-1">
           <Typography variant="body2" color="secondary">
             Comment

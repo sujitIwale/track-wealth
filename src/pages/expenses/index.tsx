@@ -103,49 +103,51 @@ const Expenses = () => {
       success={() => (
         <div className="flex flex-col">
           <div className="sticky top-0 z-10  p-4 bg-white">
-            <div className="flex gap-4 items-center">
-              <Select
-                value={filters.month}
-                onValueChange={(value) =>
-                  setFilters((prev) => ({ ...prev, month: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select month" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">All Months</SelectItem>
-                    {Array.from({ length: 12 }, (_, i) => (
-                      <SelectItem key={i} value={i.toString()}>
-                        {new Date(2000, i).toLocaleString("default", {
-                          month: "long",
-                        })}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select
-                value={filters.category}
-                onValueChange={(value: Category | "all") =>
-                  setFilters((prev) => ({ ...prev, category: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {Object.entries(Categories).map(([id, category]) => (
-                      <SelectItem key={id} value={id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Select
+                  value={filters.month}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({ ...prev, month: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="all">All Months</SelectItem>
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <SelectItem key={i} value={i.toString()}>
+                          {new Date(2000, i).toLocaleString("default", {
+                            month: "long",
+                          })}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Select
+                  value={filters.category}
+                  onValueChange={(value: Category | "all") =>
+                    setFilters((prev) => ({ ...prev, category: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="all">All Categories</SelectItem>
+                      {Object.entries(Categories).map(([id, category]) => (
+                        <SelectItem key={id} value={id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
 
               <Button variant="outline" onClick={clearFilters}>
                 <X className="h-4 w-4" />

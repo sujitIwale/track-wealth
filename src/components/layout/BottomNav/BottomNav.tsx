@@ -1,13 +1,8 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router";
 import IconButton from "../../common/IconButton/IconButton";
-import {
-  IoIosSettings,
-  IoIosSwap,
-  IoIosWallet,
-  IoMdAdd,
-  IoMdHome,
-} from "react-icons/io";
+import { IoIosSettings, IoIosWallet, IoMdAdd } from "react-icons/io";
+import { House, List } from "lucide-react";
 
 interface NavItem {
   id: string;
@@ -22,14 +17,14 @@ const navItems: NavItem[] = [
     name: "Dashboard",
     id: "dashboard",
     href: "/dashboard",
-    icon: <IoMdHome size={28} />,
+    icon: <House size={28} />,
     type: "link",
   },
   {
     name: "Transactions",
     id: "transactions",
     href: "/expenses",
-    icon: <IoIosSwap size={28} />,
+    icon: <List size={28} />,
     type: "link",
   },
   {

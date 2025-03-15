@@ -7,7 +7,7 @@ const expensesThunks = {
     "expenses/get-all",
     async (_, { rejectWithValue }) => {
       try {
-        const data = await expensesApi.getExpenses();
+        const data = await expensesApi.getAllExpenses();
         return data;
       } catch (error) {
         return rejectWithValue(error);

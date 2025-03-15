@@ -1,10 +1,11 @@
 
-import { Category } from "../constants/expense";
+import { Category, AccountType } from "../constants/expense";
 
 export type ExpenseBase = {
   amount: number;
   name: string;
   category: Category;
+  accountType: AccountType;
   comment?: string;
   date: Date;
 };

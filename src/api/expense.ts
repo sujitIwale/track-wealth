@@ -2,6 +2,10 @@ import { ExpenseBase, Expense } from "../types/expense";
 import { Response } from "../types/response";
 import client from "./client";
 
+interface GetExpnesesQuery {
+  limit?: number;
+}
+
 export  const expensesApi = {
   getExpense: async (id: string) => {
     const response = await client.get<Response<Expense>>(
@@ -26,9 +30,20 @@ export  const expensesApi = {
     );
     return response.data;
   },
-  getExpenses: async () => {
+  getAllExpenses: async () => {
     const response = await client.get<Response<Expense[]>>(
       "/expense/all"
+    );
+    return response.data.data;
+  },
+  getExpenses: async ({ limit }: GetExpnesesQuery) => {
+    const response = await client.get<Response<Expense[]>>(
+      "/expense",
+      {
+        params: {
+          limit,
+        },
+      }
     );
     return response.data.data;
   },

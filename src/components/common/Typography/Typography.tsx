@@ -65,7 +65,7 @@ const variantMapping: Record<Variant, string> = {
   h3: "text-4xl font-normal leading-snug",
   h4: "text-3xl font-normal leading-snug",
   h5: "text-2xl font-medium leading-normal",
-  h6: "text-xl font-medium leading-normal",
+  h6: "text-xl font-semibold leading-normal",
   subtitle1: "text-base font-normal leading-relaxed",
   subtitle2: "text-sm font-medium leading-relaxed",
   body1: "text-base font-normal leading-relaxed",
