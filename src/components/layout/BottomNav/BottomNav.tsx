@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
   {
     name: "Transactions",
     id: "transactions",
-    href: "/transactions",
+    href: "/expenses",
     icon: <IoIosSwap size={28} />,
     type: "link",
   },

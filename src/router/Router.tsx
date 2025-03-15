@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Dashboard } from "../pages/dashboard";
 import { AppLayout } from "../components/layout";
-import Transactions from "../pages/transactions/Transactions";
+import Expenses from "../pages/expenses";
 
 const Router = () => {
   return (
@@ -9,7 +9,7 @@ const Router = () => {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/expenses" element={<Expenses />} />
         </Route>
       </Routes>
     </BrowserRouter>

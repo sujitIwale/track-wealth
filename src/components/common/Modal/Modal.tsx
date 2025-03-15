@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { FiX } from "react-icons/fi";
 import IconButton from "../IconButton/IconButton";
@@ -17,7 +17,7 @@ interface ModalProps {
 interface ModalHeaderProps {
   children?: React.ReactNode;
   title?: string;
-  onClose: () => void;
+  onClose?: () => void;
   className?: string;
 }
 
@@ -43,6 +43,20 @@ const Modal: React.FC<ModalProps> & {
   showCloseButton = true,
   className = "",
 }) => {
+  // Handle ESC key press
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeKey);
+    };
+  }, [onClose]);
+
   if (!isOpen) return null;
 
   // Define Tailwind size mappings for larger screens.
@@ -87,14 +101,16 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({
   title,
   className = "",
 }) => (
-  <div className={`flex items-center justify-between p-4 ${className}`}>
+  <div className={`flex items-center justify-between ${className}`}>
     {title && <Typography variant="h5">{title}</Typography>}
-    {children && <div>{children}</div>}
-    <IconButton
-      className="p-0"
-      icon={<IoClose size={24} />}
-      onClick={onClose}
-    />
+    {children}
+    {onClose ? (
+      <IconButton
+        className="p-0"
+        icon={<IoClose size={24} />}
+        onClick={onClose}
+      />
+    ) : null}
   </div>
 );
 

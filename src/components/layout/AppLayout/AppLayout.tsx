@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import StickyFooter from "../BottomNav/BottomNav";
 import Header from "../Header/Header";
 import AddExpense from "../../AddExpense/AddExpense";
+import { Toaster } from "@/components/ui/sonner";
 
 const AppLayout = () => {
   return (
@@ -17,6 +18,7 @@ const AppLayout = () => {
       </div>
 
       <AddExpense />
+      <Toaster closeButton />
     </div>
   );
 };
