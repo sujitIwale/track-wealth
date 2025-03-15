@@ -1,41 +1,61 @@
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
+import {
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  BarChart,
+  Bar,
+} from "recharts";
+import { Expense } from "@/types/expense";
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+interface ChartProps {
+  expenses: Expense[];
+}
 
-const Chart = () => {
+const Chart = ({ expenses }: ChartProps) => {
+  const chartData = expenses.map((expense) => ({
+    date: new Date(expense.createdAt).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+    amount: expense.amount,
+  }));
+
   return (
     <ResponsiveContainer width="100%" height={200}>
-      <LineChart data={chartData}>
-        <XAxis
-          dataKey="month"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <Tooltip />
-        <Line
-          type="monotone"
-          dataKey="desktop"
-          stroke="var(--chart-1)"
-          strokeWidth={2}
-          dot={false}
-        />
-        {/* <Line
-          type="monotone"
-          dataKey="mobile"
-          stroke="var(--chart-2)"
-          strokeWidth={2}
-          dot={false}
-        /> */}
-      </LineChart>
+      {expenses.length > 7 ? (
+        <LineChart data={chartData}>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "white",
+              border: "none",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+            labelFormatter={(label) => `Date: ${label}`}
+          />
+          <Line
+            type="monotone"
+            dataKey="amount"
+            stroke="var(--chart-1)"
+            strokeWidth={2}
+            dot={false}
+          />
+        </LineChart>
+      ) : (
+        <BarChart data={chartData}>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "white",
+              border: "none",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+            }}
+            labelFormatter={(label) => `Date: ${label}`}
+          />
+          <Bar dataKey="amount" fill="var(--chart-1)" />
+        </BarChart>
+      )}
     </ResponsiveContainer>
   );
 };

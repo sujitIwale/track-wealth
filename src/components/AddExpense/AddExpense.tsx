@@ -1,4 +1,3 @@
-import Modal from "../common/Modal/Modal";
 import Typography from "../common/Typography/Typography";
 import { expensesApi } from "../../api/expense";
 import { useEffect, useState } from "react";
@@ -21,13 +20,20 @@ import expensesThunks from "@/store/thunks/expenses";
 import { useAppDispatch } from "@/store/store";
 import Spinner from "../common/Spinner/Spinner";
 import AccountSelector from "./components/AccountSelector";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+
 const initialExpense: ExpenseBase = {
   amount: 0,
   name: "",
   category: "food",
   accountType: "cash",
   comment: "",
-  date: new Date(),
+  date: Date.now(),
 };
 
 type AddExpenseProps = {
@@ -51,7 +57,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
             category: _expense.category,
             accountType: _expense.accountType,
             comment: _expense.comment,
-            date: new Date(_expense.createdAt),
+            date: new Date(_expense.createdAt).getTime(),
           });
         }
       });
@@ -62,6 +68,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
     key: keyof ExpenseBase,
     value: ExpenseBase[keyof ExpenseBase]
   ) => {
+    console.log(key, value);
     setExpense((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -90,114 +97,103 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
   };
 
   return (
-    <Modal
-      isOpen={open ?? false}
-      onClose={handleClose}
-      showCloseButton={false}
-      size="full"
-    >
-      <Modal.Header className="flex items-center gap-2 py-4 px-2">
-        <Button variant="ghost" size="icon" onClick={handleClose}>
-          <X />
-        </Button>
-        <Typography variant="h6" className="pl-7">
-          Add Expense
-        </Typography>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={handleSave}
-          disabled={status === STATUS.LOADING}
-          className="w-10 h-10"
-        >
-          {status === STATUS.LOADING ? (
-            <Spinner />
-          ) : (
-            <Check className="w-6 h-6" />
-          )}
-        </Button>
-      </Modal.Header>
-      <Modal.Body className="flex flex-col gap-4 p-4">
-        <div className="flex items-center gap-2">
-          <CategorySelector
-            value={expense.category}
-            onValueChange={(val) => handleChange("category", val)}
+    <Drawer open={open ?? false} onOpenChange={handleClose}>
+      <DrawerContent className="h-[90vh] max-h-[95vh]">
+        <DrawerHeader className="flex items-center justify-between py-4 px-2">
+          <Button variant="ghost" size="icon" onClick={handleClose}>
+            <X />
+          </Button>
+          <DrawerTitle className="pl-7">Add Expense</DrawerTitle>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleSave}
+            disabled={status === STATUS.LOADING}
+            className="w-10 h-10"
+          >
+            {status === STATUS.LOADING ? (
+              <Spinner />
+            ) : (
+              <Check className="w-6 h-6" />
+            )}
+          </Button>
+        </DrawerHeader>
+        <div className="flex flex-col gap-4 p-4 overflow-y-auto">
+          <div className="flex items-center gap-2">
+            <CategorySelector
+              value={expense.category}
+              onValueChange={(val) => handleChange("category", val)}
+            />
+            <AccountSelector
+              value={expense.accountType}
+              onValueChange={(val) => handleChange("accountType", val)}
+            />
+          </div>
+          <AmountInput
+            value={expense.amount}
+            onChange={(val) => handleChange("amount", val)}
           />
-          <AccountSelector
-            value={expense.accountType}
-            onValueChange={(val) => handleChange("accountType", val)}
-          />
+          <div className="flex flex-col gap-1">
+            <Typography variant="body2" color="secondary">
+              Title
+            </Typography>
+            <input
+              type="text"
+              placeholder="Enter expense title..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              value={expense.name}
+              onChange={(e) => handleChange("name", e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="body2" color="secondary">
+              Date
+            </Typography>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !expense.date && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {expense.date ? (
+                    format(expense.date, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={new Date(expense.date)}
+                  onSelect={(date) =>
+                    date && handleChange("date", date.getTime())
+                  }
+                  initialFocus
+                  showOutsideDays={false}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="body2" color="secondary">
+              Comment
+            </Typography>
+            <textarea
+              placeholder="Add a comment..."
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              rows={3}
+              value={expense.comment}
+              onChange={(e) => handleChange("comment", e.target.value)}
+            />
+          </div>
         </div>
-        <AmountInput
-          value={expense.amount}
-          onChange={(val) => handleChange("amount", val)}
-        />
-        <div className="flex flex-col gap-1">
-          <Typography variant="body2" color="secondary">
-            Title
-          </Typography>
-          <input
-            type="text"
-            placeholder="Enter expense title..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            value={expense.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <Typography variant="body2" color="secondary">
-            Date
-          </Typography>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !expense.date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {expense.date ? (
-                  format(expense.date, "PPP")
-                ) : (
-                  <span>Pick a date</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={expense.date}
-                onSelect={(date) => date && handleChange("date", date)}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-        {/* <div className="flex flex-col gap-1">
-          <Typography variant="body2" color="secondary">
-            Category
-          </Typography>
-          <CategorySelector
-            value={expense.category}
-            onValueChange={(val) => handleChange("category", val)}
-          />
-        </div> */}
-        <div className="flex flex-col gap-1">
-          <Typography variant="body2" color="secondary">
-            Comment
-          </Typography>
-          <textarea
-            placeholder="Add a comment..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            rows={3}
-            value={expense.comment}
-            onChange={(e) => handleChange("comment", e.target.value)}
-          />
-        </div>
-      </Modal.Body>
-    </Modal>
+      </DrawerContent>
+    </Drawer>
   );
 };
 

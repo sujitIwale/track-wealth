@@ -7,7 +7,7 @@ export type ExpenseBase = {
   category: Category;
   accountType: AccountType;
   comment?: string;
-  date: Date;
+  date: number;
 };
 
 export type Expense = ExpenseBase & {

@@ -4,6 +4,9 @@ import client from "./client";
 
 interface GetExpnesesQuery {
   limit?: number;
+  from?: string;
+  to?: string;
+  order?: "asc" | "desc";
 }
 
 export  const expensesApi = {
@@ -14,6 +17,7 @@ export  const expensesApi = {
     return response.data.data;
   },
   createExpense: async (data: ExpenseBase) => {
+    console.log({ data });
     const response = await client.post("/expense/create", data);
     return response.data;
   },
@@ -36,12 +40,15 @@ export  const expensesApi = {
     );
     return response.data.data;
   },
-  getExpenses: async ({ limit }: GetExpnesesQuery) => {
+  getExpenses: async ({ limit, from, to, order }: GetExpnesesQuery) => {
     const response = await client.get<Response<Expense[]>>(
       "/expense",
       {
         params: {
           limit,
+          from,
+          to,
+          order,
         },
       }
     );

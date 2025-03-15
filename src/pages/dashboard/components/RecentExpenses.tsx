@@ -12,6 +12,7 @@ const RecentExpenses = () => {
     const fetchRecentExpenses = async () => {
       const recentExpenses = await expensesApi.getExpenses({
         limit: 5,
+        order: "desc",
         // sort: "date",
         // order: "desc"
       });
