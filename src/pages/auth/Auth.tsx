@@ -9,10 +9,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FcGoogle } from "react-icons/fc";
 import authService from "@/services/auth";
-
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 const Auth = () => {
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
   const handleGoogleAuth = () => {
     // Handle Google authentication
+    setIsAuthenticating(true);
     authService.loginWithGoogle();
   };
 
@@ -39,7 +42,11 @@ const Auth = () => {
                   className="w-full"
                   onClick={handleGoogleAuth}
                 >
-                  <FcGoogle className="mr-2 h-5 w-5" />
+                  {isAuthenticating ? (
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ) : (
+                    <FcGoogle className="mr-2 h-5 w-5" />
+                  )}
                   Sign in with Google
                 </Button>
               </div>

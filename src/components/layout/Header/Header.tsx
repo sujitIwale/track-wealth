@@ -1,7 +1,6 @@
 import React from "react";
-import { IoPerson } from "react-icons/io5";
 import { useLocation } from "react-router";
-import IconButton from "../../common/IconButton/IconButton";
+import Profile from "./Profile";
 
 interface NavItem {
   id: string;
@@ -34,7 +33,7 @@ const Header: React.FC = () => {
         />
         {/* Display current route name next to the logo */}
         <span className="ml-3 text-lg font-semibold">{currentItem.name}</span>
-        <IconButton icon={<IoPerson size={28} />} onClick={() => {}} />
+        <Profile />
       </nav>
     </header>
   );

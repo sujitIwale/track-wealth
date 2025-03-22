@@ -7,4 +7,9 @@ export const authApi = {
     });
     return response.data;
   },
+  logout: async () => {
+    await client.get("/auth/logout", {
+      withCredentials: true,
+    });
+  },
 };

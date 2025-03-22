@@ -1,14 +1,17 @@
 import { useEffect } from "react";
-import { User } from "@/types/user";
 import { useState } from "react";
 import { userApi } from "@/api/user";
 import AuthContext from "./AuthContext";
 import authService from "@/services/auth";
+import { setUser } from "@/store/slices/userSlice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { authApi } from "@/api/auth";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,8 +20,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!localStorage.getItem("token")) {
           throw new Error("No token found");
         }
-        const user = await userApi.getUser();
-        setUser(user);
+        const response = await userApi.getUser();
+        dispatch(setUser(response.data));
         setIsAuthenticated(true);
       } catch (error) {
         console.error(error);
@@ -35,10 +38,18 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     fetchUser();
-  }, []);
+  }, [dispatch]);
+
+  const logout = async () => {
+    await authApi.logout().finally(() => {
+      authService.logout();
+      dispatch(setUser(null));
+      setIsAuthenticated(false);
+    });
+  };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, loading }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

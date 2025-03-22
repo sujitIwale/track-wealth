@@ -9,7 +9,7 @@ import { Home } from "lucide-react";
 import Success from "@/pages/auth/Success";
 import PrivateRoute from "@/components/routes/PrivateRoute";
 import GuestRoute from "@/components/routes/GuestRoute";
-
+import Onboarding from "@/pages/onboarding/Onboarding";
 const Router = () => {
   const { user, isAuthenticated } = useAuth0();
   console.log({ user, isAuthenticated });
@@ -18,6 +18,7 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route element={<PrivateRoute />}>
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/expenses" element={<Expenses />} />

@@ -1,9 +1,10 @@
 export type User = {
   id: string;
-  name: string;
   email: string;
-  image: string;
+  name: string | null;
+  profilePicture: string | null;
   createdAt: Date;
   updatedAt: Date;
   onboarded: boolean;
+  currency: string | null;
 };
