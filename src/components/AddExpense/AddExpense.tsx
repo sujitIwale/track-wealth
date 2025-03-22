@@ -17,7 +17,7 @@ import { CalendarIcon, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import expensesThunks from "@/store/thunks/expenses";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import Spinner from "../common/Spinner/Spinner";
 import AccountSelector from "./components/AccountSelector";
 import {
@@ -45,6 +45,7 @@ type AddExpenseProps = {
 const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
   const [expense, setExpense] = useState<ExpenseBase>(initialExpense);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
+  const currency = useAppSelector((state) => state.user.currency);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -132,6 +133,7 @@ const AddExpense = ({ expenseId, open, onClose }: AddExpenseProps) => {
           <AmountInput
             value={expense.amount}
             onChange={(val) => handleChange("amount", val)}
+            currency={currency || "USD"}
           />
           <div className="flex flex-col gap-1">
             <Typography variant="body2" color="secondary">

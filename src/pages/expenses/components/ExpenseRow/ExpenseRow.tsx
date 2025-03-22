@@ -3,6 +3,7 @@ import Typography from "@/components/common/Typography/Typography";
 import { Expense } from "@/types/expense";
 import ExpenseRowMenu from "./ExpenseRowMenu";
 import { Categories } from "@/constants/expense";
+import { useAppSelector } from "@/store/store";
 
 type ExpenseRowProps = {
   expense: Expense;
@@ -11,10 +12,11 @@ type ExpenseRowProps = {
 };
 
 const ExpenseRow: React.FC<ExpenseRowProps> = ({ expense }) => {
+  const currency = useAppSelector((state) => state.user.currency);
   const { id, amount, name, comment, category } = expense;
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: currency || "USD",
   }).format(amount);
   const isExpense = amount < 0;
   const categoryDetails = Categories[category];
