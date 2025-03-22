@@ -24,9 +24,6 @@ const Overview = () => {
           response = await expensesApi.getExpenses({ order: "asc" });
         } else {
           switch (selectedTab) {
-            case "day":
-              from.setDate(from.getDate() - 1);
-              break;
             case "week":
               from.setDate(from.getDate() - 7);
               break;
@@ -37,6 +34,7 @@ const Overview = () => {
               from.setFullYear(from.getFullYear() - 1);
               break;
           }
+          console.log(from.getDate());
           response = await expensesApi.getExpenses({
             from: from.toISOString(),
             to: to.toISOString(),
