@@ -18,7 +18,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(true);
       try {
         if (!localStorage.getItem("token")) {
-          throw new Error("No token found");
+          setLoading(false);
+          return;
         }
         const response = await userApi.getUser();
         dispatch(setUser(response.data));
@@ -34,6 +35,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = searchParams.get("token");
 
     if (token) {
+      console.log("setting token auth provider", token);
       authService.handleGoogleAuthCallback(token);
     }
 
