@@ -9,7 +9,7 @@ import Success from "@/pages/auth/Success";
 import PrivateRoute from "@/components/routes/PrivateRoute";
 import GuestRoute from "@/components/routes/GuestRoute";
 import Onboarding from "@/pages/onboarding/Onboarding";
-import AddTransaction from "@/components/AddExpense/AddExpense";
+import AddTransaction from "@/components/AddTransaction/AddTransaction";
 
 const Router = () => {
   const { user, isAuthenticated } = useAuth0();
