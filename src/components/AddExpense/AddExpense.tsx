@@ -11,9 +11,14 @@ import {
 } from "@/components/ui/drawer";
 import TransactionProvider from "./context/TransactionProvider";
 import { useTransaction } from "./context/TransactionContext";
+import Switch from "./components/Switch";
+import { useParams, useNavigate } from "react-router";
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
-import Switch from "./components/Switch";
+import { incomesApi } from "@/api/transaction";
+import { useEffect } from "react";
+import { expensesApi } from "@/api/transaction";
+import { useAppSelector } from "@/store/store";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
@@ -30,7 +35,40 @@ type ModalContentProps = {
 };
 
 const ModalContent = ({ onClose }: ModalContentProps) => {
-  const { type, setType, setExpense, save, status } = useTransaction();
+  const { type, id } = useParams();
+  const currency = useAppSelector((state) => state.user.currency);
+  const { setExpense, setIncome, save, reset, status } = useTransaction();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (type === "expense" && id) {
+      expensesApi.getExpense(id).then((_expense) => {
+        if (_expense) {
+          setExpense({
+            amount: _expense.amount,
+            name: _expense.name,
+            category: _expense.category,
+            accountType: _expense.accountType,
+            comment: _expense.comment,
+            date: new Date(_expense.createdAt).getTime(),
+          });
+        }
+      });
+    } else if (type === "income" && id) {
+      incomesApi.getIncome(id).then((_income) => {
+        if (_income) {
+          setIncome({
+            amount: _income.amount,
+            name: _income.name,
+            source: _income.source,
+            accountType: _income.accountType,
+            comment: _income.comment,
+            date: new Date(_income.createdAt).getTime(),
+          });
+        }
+      });
+    }
+  }, [id, setExpense, setIncome, type]);
 
   const handleClose = () => {
     onClose?.();
@@ -38,11 +76,16 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
   };
 
   const handleSave = () => {
-    save().then((success) => {
+    save(type as "expense" | "income", id).then((success) => {
       if (success) {
         handleClose();
       }
     });
+  };
+
+  const handleTypeChange = (value: "expense" | "income") => {
+    navigate(`/transaction/${value}`);
+    reset();
   };
 
   return (
@@ -52,7 +95,9 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
           <X />
         </Button>
         <DrawerTitle className="pl-7">
-          {type === "expense" ? "Add Expense" : "Add Income"}
+          {type === "expense"
+            ? `${id ? "Edit" : "Add"} Expense`
+            : `${id ? "Edit" : "Add"} Income`}
         </DrawerTitle>
         <Button
           size="icon"
@@ -70,25 +115,35 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
       </DrawerHeader>
       <div className="flex flex-col gap-4 p-4 overflow-y-auto">
         <div className="flex justify-center mb-6">
-          <Switch value={type} onChange={setType} />
+          <Switch
+            value={type as "expense" | "income"}
+            onChange={handleTypeChange}
+          />
         </div>
-        {type === "expense" ? <ExpenseForm /> : <IncomeForm />}
+        {type === "expense" ? (
+          <ExpenseForm currency={currency} />
+        ) : (
+          <IncomeForm currency={currency} />
+        )}
       </div>
     </DrawerContent>
   );
 };
 
 type AddTransactionProps = {
-  expenseId?: string | null;
   open?: boolean;
-  onClose?: () => void;
 };
 
-const AddTransaction = ({ expenseId, open, onClose }: AddTransactionProps) => {
+const AddTransaction = ({ open }: AddTransactionProps) => {
+  const navigate = useNavigate();
+  const onClose = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <TransactionProvider>
       <Drawer open={open ?? false} onOpenChange={onClose}>
-        <ModalContent expenseId={expenseId} onClose={onClose} />
+        <ModalContent onClose={onClose} />
       </Drawer>
     </TransactionProvider>
   );

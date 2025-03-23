@@ -76,7 +76,7 @@ const StickyFooter: React.FC = () => {
               className="p-3 bg-amber-600 text-white"
               icon={item.icon}
               onClick={() => {
-                navigate("/expense");
+                navigate("/transaction/expense");
               }}
             />
           );

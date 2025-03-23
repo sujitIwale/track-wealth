@@ -43,8 +43,7 @@ const ExpenseRowMenu = ({ expense }: ExpenseRowMenuProps) => {
         <DropdownMenuItem
           onClick={() =>
             navigate({
-              pathname: "/expense",
-              search: `?expenseId=${expense.id}`,
+              pathname: `/transaction/expense/${expense.id}`,
             })
           }
           className="flex items-center px-4 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"

@@ -10,12 +10,10 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { useAppSelector } from "@/store/store";
 import Selector from "./Selector";
 import { CategoriesList, AccountTypesList } from "@/constants/expense";
 
-const ExpenseForm = () => {
-  const currency = useAppSelector((state) => state.user.currency);
+const ExpenseForm = ({ currency }: { currency: string }) => {
   const { expense, setExpense } = useTransaction();
 
   const handleChange = (

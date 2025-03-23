@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
-const IncomeForm = () => {
+const IncomeForm = ({ currency }: { currency: string }) => {
   const { income, setIncome } = useTransaction();
 
   const handleChange = (
@@ -44,6 +44,7 @@ const IncomeForm = () => {
         />
       </div>
       <AmountInput
+        currency={currency}
         value={income.amount}
         onChange={(val) => setIncome({ ...income, amount: val })}
       />
