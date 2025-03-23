@@ -8,7 +8,7 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { Expense } from "@/types/expense";
 import { useAppDispatch } from "@/store/store";
-import expensesThunks from "@/store/thunks/expenses";
+import expensesThunks from "@/store/thunks/transactions";
 import { toast } from "sonner";
 
 type ExpenseRowMenuProps = {

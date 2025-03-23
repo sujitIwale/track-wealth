@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { expensesApi } from "@/api/expense";
+import { expensesApi } from "@/api/transaction";
 import Typography from "@/components/common/Typography/Typography";
 import { Expense } from "@/types/expense";
 import ExpenseRow from "@/pages/expenses/components/ExpenseRow/ExpenseRow";

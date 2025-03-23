@@ -3,7 +3,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Chart from "./Chart";
 import { useEffect, useState } from "react";
 import { Expense } from "@/types/expense";
-import { expensesApi } from "@/api/expense";
+import { expensesApi } from "@/api/transaction";
 import { STATUS } from "@/types/common";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAppSelector } from "@/store/store";

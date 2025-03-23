@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import expensesThunks from "@/store/thunks/expenses";
+import expensesThunks from "@/store/thunks/transactions";
 import StateRenderer from "@/components/layout/StateRenderer/StateRenderer";
 import { STATUS } from "@/types/common";
 import Spinner from "@/components/common/Spinner/Spinner";

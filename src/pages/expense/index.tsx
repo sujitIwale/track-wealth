@@ -1,4 +1,4 @@
-import AddExpense from "@/components/AddExpense/AddExpense";
+import AddTransaction from "@/components/AddExpense/AddExpense";
 import { useNavigate, useSearchParams } from "react-router";
 
 const Expense = () => {
@@ -11,7 +11,7 @@ const Expense = () => {
     navigate(-1);
   };
 
-  return <AddExpense expenseId={expenseId} open={true} onClose={onClose} />;
+  return <AddTransaction expenseId={expenseId} open={true} onClose={onClose} />;
 };
 
 export default Expense;

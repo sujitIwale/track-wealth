@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface CategorySelectorProps {
+interface SelectorProps {
   list: {
     id: string;
     name: string;
@@ -18,11 +18,7 @@ interface CategorySelectorProps {
   onValueChange?: (value: string) => void;
 }
 
-const CategorySelector = ({
-  list,
-  value,
-  onValueChange,
-}: CategorySelectorProps) => {
+const Selector = ({ list, value, onValueChange }: SelectorProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className="w-full">
@@ -52,4 +48,4 @@ const CategorySelector = ({
   );
 };
 
-export default CategorySelector;
+export default Selector;
