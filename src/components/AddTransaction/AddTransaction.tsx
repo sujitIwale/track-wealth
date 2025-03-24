@@ -89,7 +89,7 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
   };
 
   return (
-    <DrawerContent className="min-h-screen">
+    <DrawerContent>
       <DrawerHeader className="flex items-center justify-between py-4 px-2">
         <Button variant="ghost" size="icon" onClick={handleClose}>
           <X />
@@ -113,7 +113,7 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
           )}
         </Button>
       </DrawerHeader>
-      <div className="flex flex-col gap-4 p-4 overflow-y-auto">
+      <div className="flex flex-col gap-4 p-4 overflow-y-auto pb-[70px]">
         <div className="flex justify-center mb-6">
           <Switch
             value={type as "expense" | "income"}

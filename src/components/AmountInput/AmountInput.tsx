@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { currenciesMap } from "@/constants/misc";
+
 interface AmountInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   value?: string | number;
@@ -14,14 +15,14 @@ interface AmountInputProps
   autoFocus?: boolean;
 }
 
-const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
+const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
   (
     { value, onChange, currency = "USD", autoFocus = true, className = "" },
     ref
   ) => {
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState(false);
-    const spanRef = useRef<HTMLSpanElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const currencySymbol = currency ? currenciesMap[currency].symbol : "$";
 
@@ -43,27 +44,15 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
       }
     }, [value]);
 
-    // Set caret to end whenever inputValue changes
-    useEffect(() => {
-      if (spanRef.current) {
-        const range = document.createRange();
-        const selection = window.getSelection();
-        range.selectNodeContents(spanRef.current);
-        range.collapse(false);
-        selection?.removeAllRanges();
-        selection?.addRange(range);
-      }
-    }, [inputValue]);
-
     // Auto focus on mount if needed
     useEffect(() => {
-      if (autoFocus && spanRef.current) {
-        spanRef.current.focus();
+      if (autoFocus && inputRef.current) {
+        inputRef.current.focus();
       }
     }, [autoFocus]);
 
-    // Prevent unwanted keys before they’re added
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    // Prevent unwanted keys
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       // Allow control keys (backspace, delete, arrows, tab)
       if (
         e.key === "Backspace" ||
@@ -74,6 +63,20 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
       ) {
         return;
       }
+
+      // Handle Enter key
+      if (e.key === "Enter") {
+        e.preventDefault();
+        inputRef.current?.blur();
+        return;
+      }
+
+      // Handle Space key
+      if (e.key === " ") {
+        e.preventDefault();
+        return;
+      }
+
       // If key is a single character and is not a digit, prevent it
       if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
         e.preventDefault();
@@ -81,8 +84,8 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
     };
 
     // Handle input changes and formatting
-    const handleInput = (e: React.FormEvent<HTMLSpanElement>) => {
-      let rawValue = e.currentTarget.textContent || "";
+    const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let rawValue = e.target.value;
 
       // Remove all non-numeric characters
       rawValue = rawValue.replace(/[^\d]/g, "");
@@ -93,7 +96,7 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
       }
 
       // Convert to a number for validation
-      const numericValue = parseInt(rawValue, 10);
+      const numericValue = rawValue ? parseInt(rawValue, 10) : 0;
 
       if (!rawValue || isNaN(numericValue)) {
         setError(true);
@@ -122,27 +125,30 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
           <span className="text-3xl font-medium text-black mr-2">
             {currencySymbol}
           </span>
-          <span
+          <input
             ref={(node) => {
               if (typeof ref === "function") {
                 ref(node);
               } else if (ref) {
                 ref.current = node;
               }
-              spanRef.current = node;
+              inputRef.current = node;
             }}
-            role="textbox"
-            contentEditable={true}
-            onInput={handleInput}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={inputValue}
+            onChange={handleInput}
             onKeyDown={handleKeyDown}
-            suppressContentEditableWarning={true}
-            className={`inline-block text-6xl md:text-5xl font-medium focus:outline-none ${
+            placeholder="0"
+            className={`inline-block text-6xl md:text-5xl font-medium focus:outline-none bg-transparent border-none p-0 w-auto text-center ${
               error ? "text-red-500" : "text-black"
             }`}
-            data-placeholder="0"
-          >
-            {inputValue}
-          </span>
+            style={{
+              width: `${(inputValue.length || 1) * 1.1}ch`,
+              minWidth: "2ch",
+            }}
+          />
         </div>
       </div>
     );

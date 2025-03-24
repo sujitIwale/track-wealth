@@ -53,7 +53,7 @@ const StickyFooter: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <footer className="bg-white shadow-accent absolute bottom-0 left-0 right-0">
+    <footer className="bg-white shadow-accent sticky bottom-0 left-0 right-0">
       <nav className="max-w-md mx-auto px-5 py-2 flex justify-between items-center h-[70px]">
         {navItems.map((item, index) => {
           if (item.type === "link") {

@@ -13,12 +13,12 @@ const AppLayout = () => {
   }
 
   return (
-    <div className="flex justify-center min-h-screen">
+    <div className="flex justify-center min-h-screen relative">
       {/* Centered container with fixed viewport height */}
       <div className="w-full max-w-md h-screen flex flex-col">
         <Header />
         {/* Main content scrolls while header/footer remain in view */}
-        <main className="flex-grow overflow-y-auto pb-[70px]">
+        <main className="flex-grow overflow-y-auto">
           <Outlet />
         </main>
         <StickyFooter />
