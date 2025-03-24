@@ -3,12 +3,12 @@ import { Dashboard } from "../pages/dashboard";
 import { AppLayout } from "../components/layout";
 import Expenses from "../pages/expenses";
 import Auth from "@/pages/auth/Auth";
-import { Home } from "lucide-react";
 import Success from "@/pages/auth/Success";
 import PrivateRoute from "@/components/routes/PrivateRoute";
 import GuestRoute from "@/components/routes/GuestRoute";
 import Onboarding from "@/pages/onboarding/Onboarding";
 import AddTransaction from "@/components/AddTransaction/AddTransaction";
+import Home from "@/pages/home/Home";
 
 const Router = () => {
   return (
