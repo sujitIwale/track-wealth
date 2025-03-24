@@ -18,7 +18,7 @@ const AppLayout = () => {
       <div className="w-full max-w-md h-screen flex flex-col">
         <Header />
         {/* Main content scrolls while header/footer remain in view */}
-        <main className="flex-grow overflow-y-auto">
+        <main className="flex-grow overflow-y-auto pb-[70px]">
           <Outlet />
         </main>
         <StickyFooter />
