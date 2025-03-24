@@ -1,6 +1,8 @@
+import { API_URL } from "@/constants/api";
+
 const authService = {
   loginWithGoogle: () => {
-    window.location.href = `http://localhost:3001/auth/google`;
+    window.location.href = `${API_URL}/auth/google`;
   },
   handleGoogleAuthCallback: (token: string) => {
     localStorage.setItem("token", token);

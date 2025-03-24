@@ -3,14 +3,17 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Chart from "./Chart";
 import { useEffect, useState } from "react";
 import { Expense } from "@/types/expense";
-import { expensesApi } from "@/api/expense";
+import { expensesApi } from "@/api/transaction";
 import { STATUS } from "@/types/common";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAppSelector } from "@/store/store";
+import { currenciesMap } from "@/constants/misc";
 
 const Overview = () => {
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
   const [selectedTab, setSelectedTab] = useState("month");
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const currency = useAppSelector((state) => state.user.currency);
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -85,7 +88,8 @@ const Overview = () => {
             <Skeleton className="h-6 w-24" />
           ) : (
             <Typography variant="h6" className="text-primary font-bold">
-              ${totalAmount.toLocaleString()}
+              {currency ? currenciesMap[currency].symbol : "$"}
+              {totalAmount.toLocaleString()}
             </Typography>
           )}
         </div>

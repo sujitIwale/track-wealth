@@ -7,22 +7,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CategoriesList, Category } from "@/constants/expense";
 
-interface CategorySelectorProps {
-  value?: Category;
-  onValueChange?: (value: Category) => void;
+interface SelectorProps {
+  list: {
+    id: string;
+    name: string;
+    icon: string;
+  }[];
+  value?: string;
+  onValueChange?: (value: string) => void;
 }
 
-const CategorySelector = ({ value, onValueChange }: CategorySelectorProps) => {
+const Selector = ({ list, value, onValueChange }: SelectorProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder="Select a category">
           {value && (
             <span className="flex items-center gap-2">
-              <span>{CategoriesList.find((c) => c.id === value)?.icon}</span>
-              <span>{CategoriesList.find((c) => c.id === value)?.name}</span>
+              <span>{list.find((c) => c.id === value)?.icon}</span>
+              <span>{list.find((c) => c.id === value)?.name}</span>
             </span>
           )}
         </SelectValue>
@@ -30,7 +34,7 @@ const CategorySelector = ({ value, onValueChange }: CategorySelectorProps) => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Categories</SelectLabel>
-          {CategoriesList.map((category) => (
+          {list.map((category) => (
             <SelectItem key={category.id} value={category.id}>
               <span className="flex items-center gap-2">
                 <span>{category.icon}</span>
@@ -44,4 +48,4 @@ const CategorySelector = ({ value, onValueChange }: CategorySelectorProps) => {
   );
 };
 
-export default CategorySelector;
+export default Selector;

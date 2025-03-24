@@ -21,29 +21,12 @@ import { userApi } from "@/api/user";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { updateUser } from "@/store/slices/userSlice";
 import { useAppDispatch } from "@/store/store";
-interface Currency {
-  code: string;
-  name: string;
-  symbol: string;
-}
-
-const currencies: Currency[] = [
-  { code: "INR", name: "Indian Rupee", symbol: "₹" },
-  { code: "USD", name: "US Dollar", symbol: "$" },
-  { code: "EUR", name: "Euro", symbol: "€" },
-  { code: "GBP", name: "British Pound", symbol: "£" },
-  { code: "JPY", name: "Japanese Yen", symbol: "¥" },
-  { code: "CAD", name: "Canadian Dollar", symbol: "C$" },
-  { code: "AUD", name: "Australian Dollar", symbol: "A$" },
-  { code: "CNY", name: "Chinese Yuan", symbol: "¥" },
-];
+import { currencies } from "@/constants/misc";
 
 const Onboarding: React.FC = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState<Currency>(
-    currencies[0]
-  );
+  const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -54,7 +37,7 @@ const Onboarding: React.FC = () => {
     }
   }, [user, navigate]);
 
-  const handleCurrencySelect = (currency: Currency) => {
+  const handleCurrencySelect = (currency: (typeof currencies)[number]) => {
     setSelectedCurrency(currency);
   };
 

@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-
+import { currenciesMap } from "@/constants/misc";
 interface AmountInputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   value?: string | number;
@@ -16,12 +16,14 @@ interface AmountInputProps
 
 const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
   (
-    { value, onChange, currency = "$", autoFocus = true, className = "" },
+    { value, onChange, currency = "USD", autoFocus = true, className = "" },
     ref
   ) => {
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState(false);
     const spanRef = useRef<HTMLSpanElement>(null);
+
+    const currencySymbol = currency ? currenciesMap[currency].symbol : "$";
 
     // Set the initial formatted value
     useEffect(() => {
@@ -118,7 +120,7 @@ const AmountInput = forwardRef<HTMLSpanElement, AmountInputProps>(
       <div className={`flex items-center justify-center ${className}`}>
         <div className="inline-flex items-center bg-transparent rounded-lg px-4 py-2 min-w-[120px]">
           <span className="text-3xl font-medium text-black mr-2">
-            {currency}
+            {currencySymbol}
           </span>
           <span
             ref={(node) => {

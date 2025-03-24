@@ -1,3 +1,4 @@
+import { Income, IncomeBase } from "@/types/transaction";
 import { ExpenseBase, Expense } from "../types/expense";
 import { Response } from "../types/response";
 import client from "./client";
@@ -53,5 +54,31 @@ export  const expensesApi = {
       }
     );
     return response.data.data;
+  },
+};
+
+export const incomesApi = {
+  getIncome: async (id: string) => {
+    const response = await client.get<Response<Income>>(
+      `/income/${id}`
+    );
+    return response.data.data;
+  },
+  createIncome: async (data: IncomeBase) => {
+    const response = await client.post("/income/create", data);
+    return response.data;
+  },
+  updateIncome: async (id: string, data: IncomeBase) => {
+    const response = await client.put<Response<Income>>(
+      `/income/update/${id}`,
+      data
+    );
+    return response.data;
+  },
+  deleteIncome: async (id: string) => {
+    const response = await client.delete<Response<Income>>(
+      `/income/delete/${id}`
+    );
+    return response.data;
   },
 };

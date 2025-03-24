@@ -1,7 +1,6 @@
 import { Outlet } from "react-router";
 import StickyFooter from "../BottomNav/BottomNav";
 import Header from "../Header/Header";
-import AddExpense from "../../AddExpense/AddExpense";
 import { Toaster } from "@/components/ui/sonner";
 import { useAuth } from "@/contexts/auth/AuthContext";
 import { Navigate } from "react-router";
@@ -24,8 +23,6 @@ const AppLayout = () => {
         </main>
         <StickyFooter />
       </div>
-
-      <AddExpense />
       <Toaster closeButton />
     </div>
   );

@@ -8,7 +8,7 @@ import { IoEllipsisVertical } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { Expense } from "@/types/expense";
 import { useAppDispatch } from "@/store/store";
-import expensesThunks from "@/store/thunks/expenses";
+import expensesThunks from "@/store/thunks/transactions";
 import { toast } from "sonner";
 
 type ExpenseRowMenuProps = {
@@ -43,8 +43,7 @@ const ExpenseRowMenu = ({ expense }: ExpenseRowMenuProps) => {
         <DropdownMenuItem
           onClick={() =>
             navigate({
-              pathname: "/expense",
-              search: `?expenseId=${expense.id}`,
+              pathname: `/transaction/expense/${expense.id}`,
             })
           }
           className="flex items-center px-4 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
