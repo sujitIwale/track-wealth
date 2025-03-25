@@ -3,12 +3,6 @@ import { ExpenseBase } from "../../types/expense";
 import { Check, X } from "lucide-react";
 import { Button } from "../ui/button";
 import Spinner from "../common/Spinner/Spinner";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
 import TransactionProvider from "./context/TransactionProvider";
 import { useTransaction } from "./context/TransactionContext";
 import Switch from "./components/Switch";
@@ -16,9 +10,11 @@ import { useParams, useNavigate } from "react-router";
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
 import { incomesApi } from "@/api/transaction";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { expensesApi } from "@/api/transaction";
 import { useAppSelector } from "@/store/store";
+import { BottomSheet, BottomSheetRef } from "react-spring-bottom-sheet";
+import "react-spring-bottom-sheet/dist/style.css";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
@@ -89,16 +85,16 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
   };
 
   return (
-    <DrawerContent>
-      <DrawerHeader className="flex items-center justify-between py-4 px-2">
+    <>
+      <div className="flex items-center justify-between py-4 px-2">
         <Button variant="ghost" size="icon" onClick={handleClose}>
           <X />
         </Button>
-        <DrawerTitle className="pl-7">
+        <h2 className="pl-7">
           {type === "expense"
             ? `${id ? "Edit" : "Add"} Expense`
             : `${id ? "Edit" : "Add"} Income`}
-        </DrawerTitle>
+        </h2>
         <Button
           size="icon"
           variant="ghost"
@@ -112,7 +108,7 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
             <Check className="w-6 h-6" />
           )}
         </Button>
-      </DrawerHeader>
+      </div>
       <div className="flex flex-col gap-4 p-4 overflow-y-auto pb-[70px]">
         <div className="flex justify-center mb-6">
           <Switch
@@ -126,7 +122,7 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
           <IncomeForm currency={currency} />
         )}
       </div>
-    </DrawerContent>
+    </>
   );
 };
 
@@ -135,6 +131,8 @@ type AddTransactionProps = {
 };
 
 const AddTransaction = ({ open }: AddTransactionProps) => {
+  const sheetRef = useRef<BottomSheetRef | null>(null);
+
   const navigate = useNavigate();
   const onClose = () => {
     navigate("/dashboard");
@@ -142,9 +140,14 @@ const AddTransaction = ({ open }: AddTransactionProps) => {
 
   return (
     <TransactionProvider>
-      <Drawer open={open ?? false} onOpenChange={onClose}>
+      <BottomSheet
+        open={open ?? false}
+        ref={sheetRef}
+        onDismiss={onClose}
+        expandOnContentDrag
+      >
         <ModalContent onClose={onClose} />
-      </Drawer>
+      </BottomSheet>
     </TransactionProvider>
   );
 };

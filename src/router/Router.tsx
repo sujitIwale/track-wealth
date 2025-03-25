@@ -19,12 +19,12 @@ const Router = () => {
           <Route path="/onboarding" element={<Onboarding />} />
           <Route element={<AppLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route
-              path="/transaction/:type/:id?"
-              element={<AddTransaction open />}
-            />
             <Route path="/expenses" element={<Expenses />} />
           </Route>
+          <Route
+            path="/transaction/:type/:id?"
+            element={<AddTransaction open />}
+          />
         </Route>
         <Route element={<GuestRoute />}>
           <Route path="/auth" element={<Auth />} />
