@@ -1,4 +1,4 @@
-import { expensesApi, incomesApi } from "@/api/transaction";
+import { expensesApi, GetExpnesesQuery, GetIncomesQuery, incomesApi } from "@/api/transaction";
 import {  ExpenseBase } from "@/types/expense";
 import { IncomeBase } from "@/types/transaction";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -15,6 +15,29 @@ const transactionsThunks = {
       }
     }
   ),
+  fetchExpenses: createAsyncThunk(
+    "expenses/get",
+    async ({ from, to, order,giveSum }:GetExpnesesQuery, { rejectWithValue }) => {
+      try {
+        const data = await expensesApi.getExpenses({ from, to, order,giveSum });  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error);
+      }
+    }
+  ),
+  fetchIncomes: createAsyncThunk(
+    "incomes/get",
+    async ({ from, to, order,giveSum }:GetIncomesQuery, { rejectWithValue }) => {
+      try {
+        const data = await incomesApi.getIncomes({ from, to, order,giveSum });  
+        return data;
+      } catch (error) {
+        return rejectWithValue(error);
+      }
+    }
+  ),
+  
   createExpense: createAsyncThunk(
     "expenses/create",
     async (expense: ExpenseBase, { rejectWithValue }) => {

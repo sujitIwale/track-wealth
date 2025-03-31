@@ -16,7 +16,7 @@ const RecentExpenses = () => {
         // sort: "date",
         // order: "desc"
       });
-      setExpenses(recentExpenses);
+      setExpenses(recentExpenses.expenses);
     };
 
     fetchRecentExpenses();

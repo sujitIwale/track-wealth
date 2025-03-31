@@ -1,10 +1,9 @@
 import React, { ReactNode } from "react";
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import Profile from "./Profile";
 import { useDevice } from "@/contexts/device/DeviceContext";
 import { List, Wallet } from "lucide-react";
 import { House } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface NavItem {
   id: string;
@@ -44,7 +43,7 @@ const Header: React.FC = () => {
   ) || { name: "App" };
 
   return (
-    <header className="flex items-center justify-between p-4 sm:pt-8 sticky top-0 left-0 right-0 bg-white z-[1000]">
+    <header className="flex items-center justify-between p-4 sticky top-0 left-0 right-0 bg-white z-40">
       <img
         src="/public/assets/logos/expenses.png"
         alt="Logo"
@@ -52,25 +51,7 @@ const Header: React.FC = () => {
       />
       {isMobile ? (
         <span className="ml-3 text-lg font-semibold">{currentItem.name}</span>
-      ) : (
-        <nav className="flex items-center justify-between w-full max-w-md mx-auto">
-          {navItems.map((item, index) => {
-            return (
-              <Link
-                to={item.href}
-                key={index}
-                className={cn(
-                  "flex items-end gap-2",
-                  currentItem.name === item.name && "text-amber-600"
-                )}
-              >
-                {item.icon}
-                <span className="text-sm font-bold">{item.name}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      )}
+      ) : null}
       <Profile />
     </header>
   );
