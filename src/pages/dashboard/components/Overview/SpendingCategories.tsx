@@ -1,6 +1,8 @@
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Typography from "@/components/common/Typography/Typography";
+import PeriodSelector from "@/components/shared/PeriodSelector";
 import { Categories } from "@/constants/expense";
-import { Expense } from "@/types/expense";
+import { useAppSelector } from "@/store/store";
+import { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -18,13 +20,11 @@ type CategoryTotal = {
   id: string;
 };
 
-interface SpendingCategoriesProps {
-  expenses: Expense[];
-}
-
-const SpendingCategories = ({ expenses }: SpendingCategoriesProps) => {
+const SpendingCategories = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("month");
+  const { expenseData } = useAppSelector((state) => state.data);
   // Process expenses to get category-wise totals
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  const categoryTotals = expenseData?.expenses.reduce((acc, expense) => {
     const category = Categories[expense.category];
     const existing = acc.find((item) => item.id === category.id);
 
@@ -66,6 +66,7 @@ const SpendingCategories = ({ expenses }: SpendingCategoriesProps) => {
               />
               <span className="flex items-center gap-1 text-muted-foreground">
                 {categoryTotals.find((item) => item.name === entry.value)?.icon}
+                {"  "}
                 {entry.value}
               </span>
             </div>
@@ -76,53 +77,52 @@ const SpendingCategories = ({ expenses }: SpendingCategoriesProps) => {
   };
 
   return (
-    <>
-      <CardHeader>
-        <CardTitle className="text-base font-medium">
+    <div className="flex flex-col gap-4">
+      <div className="flex items-center justify-between gap-4">
+        <Typography variant="subtitle1" className="font-medium text-nowrap">
           Spending By Category
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
-              <Pie
-                data={categoryTotals}
-                cx="50%"
-                cy="50%"
-                innerRadius={45}
-                outerRadius={70}
-                paddingAngle={4}
-                dataKey="value"
-              >
-                {categoryTotals.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                    className="stroke-background hover:opacity-80"
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number) => [
-                  `$${value.toFixed(2)}`,
-                  "Amount",
-                ]}
-                contentStyle={{
-                  backgroundColor: "hsl(var(--card))",
-                  borderColor: "hsl(var(--border))",
-                  borderRadius: "0.5rem",
-                }}
-                itemStyle={{
-                  color: "hsl(var(--foreground))",
-                }}
-              />
-              <Legend content={<CustomizedLegend />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </CardContent>
-    </>
+        </Typography>
+        <PeriodSelector
+          selectedPeriod={selectedPeriod}
+          setSelectedPeriod={setSelectedPeriod}
+        />
+      </div>
+      <div className="h-[250px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+            <Pie
+              data={categoryTotals}
+              cx="50%"
+              cy="50%"
+              innerRadius={45}
+              outerRadius={70}
+              paddingAngle={4}
+              dataKey="value"
+            >
+              {categoryTotals.map((_, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                  className="stroke-background hover:opacity-80"
+                />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value: number) => [`$${value.toFixed(2)}`, "Amount"]}
+              contentStyle={{
+                backgroundColor: "hsl(var(--card))",
+                borderColor: "hsl(var(--border))",
+                borderRadius: "0.5rem",
+              }}
+              itemStyle={{
+                color: "hsl(var(--foreground))",
+              }}
+            />
+            <Legend content={<CustomizedLegend />} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
   );
 };
 

@@ -32,7 +32,7 @@ const RecentExpenses = () => {
           View All
         </NavLink>
       </div>
-      <div className="space-y-4">
+      <div>
         {expenses.map((expense) => (
           <ExpenseRow key={expense.id} expense={expense} />
         ))}

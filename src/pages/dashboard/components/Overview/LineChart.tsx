@@ -6,9 +6,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
 } from "recharts";
-
 interface LineChartProps {
   incomes: { amount: number; createdAt: string }[];
   expenses: { amount: number; createdAt: string }[];
@@ -55,20 +53,24 @@ const LineChart = ({ incomes, expenses }: LineChartProps) => {
     <ResponsiveContainer width="100%" height={400}>
       <RechartsLineChart data={chartData}>
         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-        <XAxis
-          dataKey="date"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(value) => `$${value}`}
-        />
+        {/* {!isMobile ? ( */}
+        <>
+          <XAxis
+            dataKey="date"
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <YAxis
+            stroke="#888888"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={(value) => `$${value}`}
+          />
+        </>
+        {/* ) : null} */}
         <Tooltip
           content={({ active, payload }) => {
             if (active && payload && payload.length) {
@@ -110,7 +112,7 @@ const LineChart = ({ incomes, expenses }: LineChartProps) => {
             return null;
           }}
         />
-        <Legend />
+        {/* <Legend /> */}
         <Line
           type="monotone"
           dataKey="income"

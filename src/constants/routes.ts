@@ -22,12 +22,6 @@ export const desktopNavItems = [
     type: "link",
   },
   {
-    name: "Add Expense",
-    id: "add-expense",
-    icon: "plus",
-    type: "button",
-  },
-  {
     name: "Budget",
     id: "budget",
     href: "/budget",

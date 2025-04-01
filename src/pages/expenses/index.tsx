@@ -39,16 +39,14 @@ const Expenses = () => {
   });
 
   const dispatch = useAppDispatch();
-  const { expenses, expenseStatus } = useAppSelector((state) => state.data);
+  const { expenseData, expenseStatus } = useAppSelector((state) => state.data);
 
   useEffect(() => {
     dispatch(expensesThunks.fetchAllExpenses());
   }, [dispatch]);
 
-  console.log({ expenses });
-
   const groupedExpenses = useMemo(() => {
-    const filteredExpenses = expenses.filter((expense) => {
+    const filteredExpenses = expenseData.expenses.filter((expense) => {
       const expenseDate = new Date(expense.createdAt);
       const matchesMonth =
         filters.month === "all" ||
@@ -79,7 +77,7 @@ const Expenses = () => {
       });
       return groups;
     }, []);
-  }, [expenses, filters]);
+  }, [expenseData.expenses, filters]);
 
   const clearFilters = () => {
     setFilters({

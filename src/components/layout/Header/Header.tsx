@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import { useDevice } from "@/contexts/device/DeviceContext";
 import { List, Wallet } from "lucide-react";
 import { House } from "lucide-react";
+import Logo from "@/components/shared/Logo";
 
 interface NavItem {
   id: string;
@@ -43,12 +44,8 @@ const Header: React.FC = () => {
   ) || { name: "App" };
 
   return (
-    <header className="flex items-center justify-between p-4 sticky top-0 left-0 right-0 bg-white z-40">
-      <img
-        src="/public/assets/logos/expenses.png"
-        alt="Logo"
-        className="w-8 h-8"
-      />
+    <header className="flex items-center justify-between p-4 sticky top-0 left-0 right-0 bg-white z-40 sm:justify-end">
+      {isMobile ? <Logo isMobile={isMobile} /> : null}
       {isMobile ? (
         <span className="ml-3 text-lg font-semibold">{currentItem.name}</span>
       ) : null}

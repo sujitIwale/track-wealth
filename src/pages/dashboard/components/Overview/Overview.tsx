@@ -7,19 +7,10 @@ import TransactionInfo from "@/components/TransactionInfo/TransactionInfo";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import SpendingCategories from "./SpendingCategories";
 import LineChart from "./LineChart";
 import transactionsThunks from "@/store/thunks/transactions";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Link } from "react-router";
+import PeriodSelector from "@/components/shared/PeriodSelector";
 
 const Overview = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("month");
@@ -68,45 +59,31 @@ const Overview = () => {
   }, [selectedPeriod, dispatch]);
 
   return (
-    <div className="px-4 py-6 border border-gray-200 rounded-lg">
-      <div className="flex justify-between">
+    <>
+      <div className="flex justify-between px-4 sm:px-0">
         <div className="flex flex-col justify-between">
           <Typography
-            variant="subtitle1"
+            variant="subtitle2"
             className="text-gray-600 font-semibold"
           >
             Your Total Balance
           </Typography>
-          <Typography variant="h5" className="text-gray-600 font-semibold">
-            {formatCurrency(1000, "USD")}
-          </Typography>
+          <Typography variant="h4">{formatCurrency(1000, "USD")}</Typography>
         </div>
         <div className="flex gap-4">
-          <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a category">
-                {selectedPeriod}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Categories</SelectLabel>
-                <SelectItem value="month">Month</SelectItem>
-                <SelectItem value="week">Week</SelectItem>
-                <SelectItem value="day">Day</SelectItem>
-                <SelectItem value="year">Year</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Link to="/transaction/expense">
-            <Button variant="outline">
+          <PeriodSelector
+            selectedPeriod={selectedPeriod}
+            setSelectedPeriod={setSelectedPeriod}
+          />
+          <Link to="/transaction/expense" className="hidden sm:block">
+            <Button variant="default">
               <Plus size={20} />
               Add Transaction
             </Button>
           </Link>
         </div>
       </div>
-      <div className="flex gap-4">
+      <div className="flex justify-center gap-8 px-4 sm:px-0">
         <TransactionInfo
           title="Income"
           amount={incomeData?.sum}
@@ -140,11 +117,8 @@ const Overview = () => {
             </Typography>
           )}
         </div>
-        <div className="w-1/3">
-          <SpendingCategories expenses={expenseData?.expenses} />
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

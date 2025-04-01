@@ -23,12 +23,10 @@ const TransactionInfo = ({ title, amount, sent }: TransactionInfoProps) => {
         {sent ? <ArrowUp size={20} /> : <ArrowDown size={20} />}
       </div>
       <div>
-        <Typography variant="subtitle1" className="text-gray-600 font-semibold">
+        <Typography variant="subtitle2" className="text-gray-600 font-semibold">
           {title}
         </Typography>
-        <Typography variant="h5" className="text-gray-600">
-          {formatCurrency(amount, currency)}
-        </Typography>
+        <Typography variant="h6">{formatCurrency(amount, currency)}</Typography>
       </div>
     </div>
   );

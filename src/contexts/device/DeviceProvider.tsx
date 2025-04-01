@@ -2,16 +2,12 @@ import { useEffect, useState } from "react";
 import DeviceContext from "./DeviceContext";
 
 const DeviceProvider = ({ children }: { children: React.ReactNode }) => {
-  const [device, setDevice] = useState<"mobile" | "tablet" | "desktop" | null>(
-    null
-  );
+  const [device, setDevice] = useState<"mobile" | "desktop" | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setDevice("mobile");
-      } else if (window.innerWidth < 1024) {
-        setDevice("tablet");
       } else {
         setDevice("desktop");
       }
@@ -29,7 +25,6 @@ const DeviceProvider = ({ children }: { children: React.ReactNode }) => {
     <DeviceContext.Provider
       value={{
         isMobile: device === "mobile",
-        isTablet: device === "tablet",
         isDesktop: device === "desktop",
       }}
     >

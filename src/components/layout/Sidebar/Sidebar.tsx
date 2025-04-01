@@ -1,3 +1,5 @@
+import Logo from "@/components/shared/Logo";
+import { Button } from "@/components/ui/button";
 import { desktopNavItems } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { House } from "lucide-react";
@@ -22,27 +24,38 @@ const Sidebar = () => {
   ) || { name: "App" };
 
   return (
-    <div className="flex flex-col justify-between px-8 py-8 w-[200px] sm:bg-gray-50 sm:rounded-r-lg">
-      <nav className="flex flex-col gap-8 w-full">
-        {desktopNavItems.map((item, index) => {
-          return (
-            <Link
-              to={item.href!}
-              key={index}
-              className={cn(
-                "flex items-center gap-2",
-                currentItem.name === item.name
-                  ? "text-gray-900"
-                  : "text-gray-500"
-              )}
-            >
-              {iconsMap[item.icon as keyof typeof iconsMap]}
-              <span className="text-sm font-bold">{item.name}</span>
-            </Link>
-          );
-        })}
-      </nav>
-    </div>
+    <aside className="flex flex-col justify-between px-8 py-4 w-[200px] border-r border-gray-200">
+      <div className="flex flex-col w-full">
+        <Logo />
+        <nav className="flex flex-col gap-8 w-full mt-5">
+          {desktopNavItems.map((item, index) => {
+            return (
+              <Link
+                to={item.href!}
+                key={index}
+                className={cn(
+                  "flex items-center gap-2",
+                  currentItem.name === item.name
+                    ? "text-gray-900"
+                    : "text-gray-500"
+                )}
+              >
+                {iconsMap[item.icon as keyof typeof iconsMap]}
+                <span className="text-sm font-bold">{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
+      <div className="flex flex-col gap-2">
+        <Link to="/transaction/expense">
+          <Button variant="default">
+            <IoMdAdd size={28} />
+            <span className="text-sm font-bold">Add Transaction</span>
+          </Button>
+        </Link>
+      </div>
+    </aside>
   );
 };
 
