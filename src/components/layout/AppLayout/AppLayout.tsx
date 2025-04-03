@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/auth/AuthContext";
 import { Navigate } from "react-router";
 import { useDevice } from "@/contexts/device/DeviceContext";
 import Sidebar from "../Sidebar/Sidebar";
+import Import from "@/components/Import/Import";
 
 const AppLayout = () => {
   const { user } = useAuth();
@@ -28,6 +29,7 @@ const AppLayout = () => {
       </div>
       {isMobile ? <StickyFooter /> : null}
       <Toaster closeButton />
+      <Import />
     </div>
   );
 };

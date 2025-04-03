@@ -2,7 +2,9 @@ import Logo from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { desktopNavItems } from "@/constants/routes";
 import { cn } from "@/lib/utils";
-import { House } from "lucide-react";
+import { setImportModal } from "@/store/slices/uiSlice";
+import { useAppDispatch } from "@/store/store";
+import { House, ImportIcon } from "lucide-react";
 import { List } from "lucide-react";
 import { IoMdAdd } from "react-icons/io";
 import { IoIosWallet } from "react-icons/io";
@@ -18,13 +20,14 @@ const iconsMap = {
 };
 
 const Sidebar = () => {
+  const dispatch = useAppDispatch();
   // Find the nav item that matches the current path.
   const currentItem = desktopNavItems.find(
     (item) => item.href === location.pathname
   ) || { name: "App" };
 
   return (
-    <aside className="flex flex-col justify-between px-8 py-4 w-[200px] border-r border-gray-200">
+    <aside className="flex flex-col justify-between px-8 py-4 w-[240px] border-r border-gray-200">
       <div className="flex flex-col w-full">
         <Logo />
         <nav className="flex flex-col gap-8 w-full mt-5">
@@ -48,8 +51,16 @@ const Sidebar = () => {
         </nav>
       </div>
       <div className="flex flex-col gap-2">
+        <Button
+          variant="default"
+          className="w-full"
+          onClick={() => dispatch(setImportModal({ open: true }))}
+        >
+          <ImportIcon size={28} />
+          Import
+        </Button>
         <Link to="/transaction/expense">
-          <Button variant="default">
+          <Button variant="default" className="w-full">
             <IoMdAdd size={28} />
             <span className="text-sm font-bold">Add Transaction</span>
           </Button>
