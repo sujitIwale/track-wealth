@@ -4,9 +4,14 @@ import { useEffect } from "react";
 import dashboardApi from "@/api/dashboard";
 import SpendingCategories from "./components/Overview/SpendingCategories";
 import { useDevice } from "@/contexts/device/DeviceContext";
+import { Button } from "@/components/ui/button";
+import { setImportModal } from "@/store/slices/uiSlice";
+import { ImportIcon } from "lucide-react";
+import { useAppDispatch } from "@/store/store";
 
 const Dashboard = () => {
   const { isMobile } = useDevice();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dashboardApi.getSummary().then((data) => {
       console.log(data);
@@ -18,6 +23,14 @@ const Dashboard = () => {
       {isMobile ? (
         <div className="flex flex-col gap-4">
           <Overview />
+          <Button
+            variant="default"
+            className="w-full"
+            onClick={() => dispatch(setImportModal({ open: true }))}
+          >
+            <ImportIcon size={28} />
+            Import
+          </Button>
           <div className="px-4 py-6">
             <SpendingCategories />
           </div>
