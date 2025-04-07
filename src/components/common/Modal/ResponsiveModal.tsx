@@ -47,10 +47,18 @@ const ResponsiveModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="z-1000 ">
-        {headerContent && <DialogHeader>{headerContent}</DialogHeader>}
-        {children}
-        {footerContent && <DialogFooter>{footerContent}</DialogFooter>}
+      <DialogContent className="z-1000 w-full max-w-[90vw]! max-h-[90vh] overflow-auto p-0">
+        {headerContent && (
+          <DialogHeader className="sticky top-0 bg-background border-b p-4 z-1000">
+            {headerContent}
+          </DialogHeader>
+        )}
+        <div className="w-full h-full overflow-auto p-4">{children}</div>
+        {footerContent && (
+          <DialogFooter className="sticky bottom-0 bg-background border-t p-4">
+            {footerContent}
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

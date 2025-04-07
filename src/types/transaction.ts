@@ -17,11 +17,12 @@ export type Income = IncomeBase & {
 };
 
 export type ImportedTransaction = {
-  id: number;
+  id: number | string;
   amount: number;
   date: string;
   type: ImportedTransactionType;
   name: string;
+  category: string;
   toAccount: string;
   fromAccount: string;
   createdAt: string;
