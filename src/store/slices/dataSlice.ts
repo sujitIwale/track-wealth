@@ -1,20 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import expensesThunks from "../thunks/transactions";
 import incomesThunks from "../thunks/transactions";
-import { Expense } from "@/types/expense";
 import { STATUS } from "@/types/common";
-import { Income } from "@/types/transaction";
+import { ExpenseData, IncomeData } from "../types/data";
 
 interface DataState {
-    expenses: Expense[];
+    expenseData: ExpenseData
     expenseStatus: STATUS;
-    incomes: Income[];
+    incomeData: IncomeData;
+    incomeStatus: STATUS;
 }
 
 const initialState: DataState = {
     expenseStatus: STATUS.IDLE,
-    expenses: [],
-    incomes: []
+    expenseData: {sum:0,expenses:[]},
+    incomeStatus: STATUS.IDLE,
+    incomeData: {sum:0,incomes:[]}
 };
 
 const dataSlice = createSlice({
@@ -26,29 +27,43 @@ const dataSlice = createSlice({
             state.expenseStatus = STATUS.LOADING;
         });
         builder.addCase(expensesThunks.fetchAllExpenses.fulfilled, (state, action) => {
-            state.expenses = action.payload;
+            state.expenseData.expenses = action.payload
             state.expenseStatus = STATUS.SUCCESS;
         });
         builder.addCase(expensesThunks.fetchAllExpenses.rejected, (state) => {
             state.expenseStatus = STATUS.ERROR;
         });
         builder.addCase(expensesThunks.createExpense.fulfilled, (state, action) => {
-            state.expenses.push(action.payload.data);
+            state.expenseData.expenses.push(action.payload.data);
         });
         builder.addCase(expensesThunks.updateExpense.fulfilled, (state, action) => {
-            state.expenses = state.expenses.map((expense) => expense.id === action.payload.data.id ? action.payload.data : expense);
+            state.expenseData.expenses = state.expenseData.expenses.map((expense) => expense.id === action.payload.data.id ? action.payload.data : expense);
         });
         builder.addCase(expensesThunks.deleteExpense.fulfilled, (state, action) => {
-            state.expenses = state.expenses.filter((expense) => expense.id !== action.payload.data.id);
+            state.expenseData.expenses = state.expenseData.expenses.filter((expense) => expense.id !== action.payload.data.id);
+        });
+        builder.addCase(expensesThunks.fetchExpenses.pending, (state) => {
+            state.expenseStatus = STATUS.LOADING;
+        });
+        builder.addCase(expensesThunks.fetchExpenses.fulfilled, (state, action) => {
+            state.expenseData = action.payload;
+            state.expenseStatus = STATUS.SUCCESS;
+        });
+        builder.addCase(incomesThunks.fetchIncomes.pending, (state) => {
+            state.incomeStatus = STATUS.LOADING;
+        });
+        builder.addCase(incomesThunks.fetchIncomes.fulfilled, (state, action) => {
+            state.incomeData = action.payload;
+            state.incomeStatus = STATUS.SUCCESS;
         });
         builder.addCase(incomesThunks.createIncome.fulfilled, (state, action) => {
-            state.incomes.push(action.payload.data);
+            state.incomeData.incomes.push(action.payload.data);
         });
         builder.addCase(incomesThunks.updateIncome.fulfilled, (state, action) => {
-            state.incomes = state.incomes.map((income) => income.id === action.payload.data.id ? action.payload.data : income);
+            state.incomeData.incomes = state.incomeData.incomes.map((income) => income.id === action.payload.data.id ? action.payload.data : income);
         });
         builder.addCase(incomesThunks.deleteIncome.fulfilled, (state, action) => {
-            state.incomes = state.incomes.filter((income) => income.id !== action.payload.data.id);
+            state.incomeData.incomes = state.incomeData.incomes.filter((income) => income.id !== action.payload.data.id);
         });
     }
 });

@@ -38,7 +38,7 @@ const ExpenseRowMenu = ({ expense }: ExpenseRowMenuProps) => {
       <DropdownMenuContent
         align="start"
         side="bottom"
-        className="w-28 bg-white rounded-md shadow-lg border border-gray-200"
+        className="w-28 bg-white rounded-md shadow-lg border border-gray-200 z-50"
       >
         <DropdownMenuItem
           onClick={() =>

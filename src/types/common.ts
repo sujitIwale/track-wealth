@@ -5,3 +5,10 @@ export enum STATUS {
   ERROR = "ERROR",
 }
 
+
+export enum Period {
+  MONTH = "month",
+  WEEK = "week",
+  DAY = "day",
+  YEAR = "year",
+}

@@ -1,4 +1,5 @@
 import React, { JSX } from "react";
+import { cn } from "@/lib/utils";
 
 export type Color =
   | "primary"
@@ -103,17 +104,15 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
   ) => {
     const Component = component || defaultElement[variant];
 
-    const classes = [
+    const classes = cn(
       variantMapping[variant],
       colorMapping[color],
       display === "block" ? "block" : display === "inline" ? "inline" : "",
       gutterBottom ? "mb-4" : "",
       noWrap ? "whitespace-nowrap overflow-hidden text-ellipsis" : "",
       align !== "inherit" ? `text-${align}` : "",
-      className,
-    ]
-      .filter(Boolean)
-      .join(" ");
+      className
+    );
 
     return (
       <Component ref={ref} className={classes} {...rest}>

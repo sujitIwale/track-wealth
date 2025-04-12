@@ -2,12 +2,22 @@ import { Income, IncomeBase } from "@/types/transaction";
 import { ExpenseBase, Expense } from "../types/expense";
 import { Response } from "../types/response";
 import client from "./client";
+import { ExpenseData, IncomeData } from "@/store/types/data";
 
-interface GetExpnesesQuery {
+export interface GetExpnesesQuery {
   limit?: number;
   from?: string;
   to?: string;
   order?: "asc" | "desc";
+  giveSum?: boolean;
+}
+
+export interface GetIncomesQuery {
+  limit?: number;
+  from?: string;
+  to?: string;
+  order?: "asc" | "desc";
+  giveSum?: boolean;
 }
 
 export  const expensesApi = {
@@ -41,15 +51,15 @@ export  const expensesApi = {
     );
     return response.data.data;
   },
-  getExpenses: async ({ limit, from, to, order }: GetExpnesesQuery) => {
-    const response = await client.get<Response<Expense[]>>(
-      "/expense",
+  getExpenses: async ({ limit, from, to, order,giveSum }: GetExpnesesQuery) => {
+    const response = await client.get<Response<ExpenseData>>("/expense",
       {
         params: {
           limit,
           from,
           to,
           order,
+          giveSum,
         },
       }
     );
@@ -80,5 +90,13 @@ export const incomesApi = {
       `/income/delete/${id}`
     );
     return response.data;
+  },
+  getIncomes: async ({ limit, from, to, order,giveSum }: GetIncomesQuery) => {
+    const response = await client.get<Response<IncomeData>>("/income",
+      {
+        params: { limit, from, to, order,giveSum },
+      }
+    );
+    return response.data.data;
   },
 };

@@ -3,7 +3,8 @@ import { expensesApi } from "@/api/transaction";
 import Typography from "@/components/common/Typography/Typography";
 import { Expense } from "@/types/expense";
 import ExpenseRow from "@/pages/expenses/components/ExpenseRow/ExpenseRow";
-import { NavLink } from "react-router";
+import { Link } from "react-router";
+import { Button } from "@/components/ui/button";
 
 const RecentExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -16,7 +17,7 @@ const RecentExpenses = () => {
         // sort: "date",
         // order: "desc"
       });
-      setExpenses(recentExpenses);
+      setExpenses(recentExpenses.expenses);
     };
 
     fetchRecentExpenses();
@@ -28,11 +29,11 @@ const RecentExpenses = () => {
         <Typography variant="h6" className="text-gray-600">
           Recent Expenses
         </Typography>
-        <NavLink to="/expenses" className="text-primary">
-          View All
-        </NavLink>
+        <Link to="/expenses">
+          <Button variant="outline">View All</Button>
+        </Link>
       </div>
-      <div className="space-y-4">
+      <div>
         {expenses.map((expense) => (
           <ExpenseRow key={expense.id} expense={expense} />
         ))}

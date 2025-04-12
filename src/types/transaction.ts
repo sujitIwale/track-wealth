@@ -15,3 +15,19 @@ export type Income = IncomeBase & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type ImportedTransaction = {
+  id: number | string;
+  amount: number;
+  date: string;
+  type: ImportedTransactionType;
+  name: string;
+  category: string;
+  toAccount: string;
+  fromAccount: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+};
+
+export type ImportedTransactionType = "DEBIT" | "CREDIT";

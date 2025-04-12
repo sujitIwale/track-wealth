@@ -1,118 +1,109 @@
 import Typography from "@/components/common/Typography/Typography";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Chart from "./Chart";
-import { useEffect, useState } from "react";
-import { Expense } from "@/types/expense";
-import { expensesApi } from "@/api/transaction";
-import { STATUS } from "@/types/common";
+import { useCallback, useEffect, useState } from "react";
+import { Period, STATUS } from "@/types/common";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAppSelector } from "@/store/store";
-import { currenciesMap } from "@/constants/misc";
+import TransactionInfo from "@/components/TransactionInfo/TransactionInfo";
+import { formatCurrency } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import LineChart from "./LineChart";
+import { Link } from "react-router";
+import PeriodSelector from "@/components/shared/PeriodSelector";
+import { ExpenseData, IncomeData } from "@/store/types/data";
+import { getBothTransactions } from "@/lib/utils/transactions";
+import EmptyState from "@/components/shared/EmptyState";
 
 const Overview = () => {
+  const [expenseData, setExpenseData] = useState<ExpenseData | null>(null);
+  const [incomeData, setIncomeData] = useState<IncomeData | null>(null);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
-  const [selectedTab, setSelectedTab] = useState("month");
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const currency = useAppSelector((state) => state.user.currency);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.MONTH);
+
+  console.log({ expenseData, incomeData, selectedPeriod });
+
+  const fetchData = useCallback(async (period: Period = Period.MONTH) => {
+    setStatus(STATUS.LOADING);
+    try {
+      const { expneseData, incomeData } = await getBothTransactions(
+        period,
+        true
+      );
+      setExpenseData(expneseData);
+      setIncomeData(incomeData);
+      setStatus(STATUS.SUCCESS);
+    } catch (error) {
+      setStatus(STATUS.ERROR);
+      setExpenseData(null);
+      setIncomeData(null);
+      console.error(error);
+    }
+  }, []);
 
   useEffect(() => {
-    const fetchExpenses = async () => {
-      setStatus(STATUS.LOADING);
-      try {
-        const to = new Date();
-        const from = new Date();
-        let response;
+    fetchData(selectedPeriod);
+  }, [selectedPeriod, fetchData]);
 
-        if (selectedTab === "all") {
-          response = await expensesApi.getExpenses({ order: "asc" });
-        } else {
-          switch (selectedTab) {
-            case "week":
-              from.setDate(from.getDate() - 7);
-              break;
-            case "month":
-              from.setMonth(from.getMonth() - 1);
-              break;
-            case "year":
-              from.setFullYear(from.getFullYear() - 1);
-              break;
-          }
-          console.log(from.getDate());
-          response = await expensesApi.getExpenses({
-            from: from.toISOString(),
-            to: to.toISOString(),
-            order: "asc",
-          });
-        }
-        setExpenses(response);
-        setStatus(STATUS.SUCCESS);
-      } catch (error: unknown) {
-        setStatus(STATUS.ERROR);
-        console.log(error);
-      }
-    };
-
-    fetchExpenses();
-  }, [selectedTab]);
-
-  const getTitle = () => {
-    switch (selectedTab) {
-      case "all":
-        return "All Time Expenses";
-      case "day":
-        return "Today's Expenses";
-      case "week":
-        return "This Week's Expenses";
-      case "month":
-        return "This Month's Expenses";
-      case "year":
-        return "This Year's Expenses";
-      default:
-        return "Expenses";
-    }
-  };
-
-  const totalAmount = expenses.reduce(
-    (sum, expense) => sum + expense.amount,
-    0
-  );
+  if (!expenseData || !incomeData) {
+    return <div>No data found</div>;
+  }
 
   return (
-    <>
-      <div className="flex flex-col gap-4 p-4 mb-10">
-        <div className="flex flex-col gap-2 items-center justify-between">
-          <Typography variant="h6" className="text-gray-600 font-semibold">
-            {getTitle()}
+    <div className="flex flex-col gap-4 px-4 py-6 rounded-lg w-full sm:w-2/3 sm:border sm:border-gray-200">
+      <div className="flex justify-between px-4 sm:px-0">
+        <div className="flex flex-col justify-between">
+          <Typography
+            variant="subtitle2"
+            className="text-gray-600 font-semibold"
+          >
+            Your Total Balance
           </Typography>
-          {status === STATUS.LOADING ? (
-            <Skeleton className="h-6 w-24" />
-          ) : (
-            <Typography variant="h6" className="text-primary font-bold">
-              {currency ? currenciesMap[currency].symbol : "$"}
-              {totalAmount.toLocaleString()}
-            </Typography>
-          )}
+          <Typography variant="h4">{formatCurrency(1000, "USD")}</Typography>
         </div>
+        <div className="flex gap-4">
+          <PeriodSelector
+            selectedPeriod={selectedPeriod}
+            setSelectedPeriod={setSelectedPeriod}
+          />
+          <Link to="/transaction/expense" className="hidden sm:block">
+            <Button variant="default">
+              <Plus size={20} />
+              Add Transaction
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="flex justify-center sm:justify-start gap-8 px-4 sm:px-0">
+        <TransactionInfo
+          title="Income"
+          amount={incomeData?.sum}
+          currency="USD"
+          sent={true}
+          change={10}
+        />
+        <TransactionInfo
+          title="Expenses"
+          amount={expenseData?.sum}
+          currency="USD"
+          sent={false}
+          change={10}
+        />
+      </div>
+      <div className="flex grow gap-4">
         {status === STATUS.LOADING ? (
           <Skeleton className="h-[200px] w-full" />
+        ) : incomeData?.incomes?.length || expenseData?.expenses?.length ? (
+          <LineChart
+            incomes={incomeData?.incomes}
+            expenses={expenseData?.expenses}
+          />
         ) : (
-          <Chart expenses={expenses} />
+          <EmptyState
+            title="No transactions found"
+            description="Please add some transactions"
+          />
         )}
-        <Tabs
-          defaultValue="month"
-          onValueChange={(value) => setSelectedTab(value)}
-          className="w-full"
-        >
-          <TabsList className="w-full grid grid-cols-5">
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="day">Day</TabsTrigger>
-            <TabsTrigger value="week">Week</TabsTrigger>
-            <TabsTrigger value="month">Month</TabsTrigger>
-            <TabsTrigger value="year">Year</TabsTrigger>
-          </TabsList>
-        </Tabs>
       </div>
-    </>
+    </div>
   );
 };
 
