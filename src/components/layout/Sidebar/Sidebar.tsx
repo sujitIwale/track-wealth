@@ -30,7 +30,7 @@ const Sidebar = () => {
     <aside className="flex flex-col justify-between px-8 py-4 w-[240px] border-r border-gray-200">
       <div className="flex flex-col w-full">
         <Logo />
-        <nav className="flex flex-col gap-8 w-full mt-5">
+        <nav className="flex flex-col gap-8 w-full mt-16">
           {desktopNavItems.map((item, index) => {
             return (
               <Link

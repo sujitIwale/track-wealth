@@ -2,6 +2,7 @@ import { Income, IncomeBase } from "@/types/transaction";
 import { ExpenseBase, Expense } from "../types/expense";
 import { Response } from "../types/response";
 import client from "./client";
+import { ExpenseData, IncomeData } from "@/store/types/data";
 
 export interface GetExpnesesQuery {
   limit?: number;
@@ -51,8 +52,7 @@ export  const expensesApi = {
     return response.data.data;
   },
   getExpenses: async ({ limit, from, to, order,giveSum }: GetExpnesesQuery) => {
-    const response = await client.get<Response<{sum:number,expenses:Expense[]}>>(
-      "/expense",
+    const response = await client.get<Response<ExpenseData>>("/expense",
       {
         params: {
           limit,
@@ -92,7 +92,7 @@ export const incomesApi = {
     return response.data;
   },
   getIncomes: async ({ limit, from, to, order,giveSum }: GetIncomesQuery) => {
-    const response = await client.get<Response<{sum:number,incomes:Income[]}>>("/income",
+    const response = await client.get<Response<IncomeData>>("/income",
       {
         params: { limit, from, to, order,giveSum },
       }

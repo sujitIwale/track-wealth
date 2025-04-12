@@ -1,14 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import expensesThunks from "../thunks/transactions";
 import incomesThunks from "../thunks/transactions";
-import { Expense } from "@/types/expense";
 import { STATUS } from "@/types/common";
-import { Income } from "@/types/transaction";
+import { ExpenseData, IncomeData } from "../types/data";
 
 interface DataState {
-    expenseData: {sum:number,expenses:Expense[]};
+    expenseData: ExpenseData
     expenseStatus: STATUS;
-    incomeData: {sum:number,incomes:Income[]};
+    incomeData: IncomeData;
     incomeStatus: STATUS;
 }
 

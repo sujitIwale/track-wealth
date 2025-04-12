@@ -7,4 +7,5 @@ export type User = {
   updatedAt: Date;
   onboarded: boolean;
   currency: string | null;
+  addedTransaction: boolean;
 };

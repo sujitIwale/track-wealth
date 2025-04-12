@@ -1,8 +1,11 @@
 import Typography from "@/components/common/Typography/Typography";
+import EmptyState from "@/components/shared/EmptyState";
 import PeriodSelector from "@/components/shared/PeriodSelector";
 import { Categories } from "@/constants/expense";
-import { useAppSelector } from "@/store/store";
-import { useState } from "react";
+import { getExpenses } from "@/lib/utils/transactions";
+import { ExpenseData } from "@/store/types/data";
+import { Period } from "@/types/common";
+import { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -21,25 +24,35 @@ type CategoryTotal = {
 };
 
 const SpendingCategories = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("month");
-  const { expenseData } = useAppSelector((state) => state.data);
-  // Process expenses to get category-wise totals
-  const categoryTotals = expenseData?.expenses.reduce((acc, expense) => {
-    const category = Categories[expense.category];
-    const existing = acc.find((item) => item.id === category.id);
+  const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.MONTH);
+  const [expenseData, setExpenseData] = useState<ExpenseData | null>(null);
 
-    if (existing) {
-      existing.value += expense.amount;
-    } else {
-      acc.push({
-        name: category.name,
-        value: expense.amount,
-        icon: category.icon,
-        id: category.id,
-      });
-    }
-    return acc;
-  }, [] as CategoryTotal[]);
+  useEffect(() => {
+    const fetchExpenseData = async () => {
+      const response = await getExpenses(selectedPeriod, false);
+      setExpenseData(response.data);
+    };
+    fetchExpenseData();
+  }, [selectedPeriod]);
+
+  // Process expenses to get category-wise totals
+  const categoryTotals =
+    expenseData?.expenses.reduce((acc, expense) => {
+      const category = Categories[expense.category];
+      const existing = acc.find((item) => item.id === category.id);
+
+      if (existing) {
+        existing.value += expense.amount;
+      } else {
+        acc.push({
+          name: category.name,
+          value: expense.amount,
+          icon: category.icon,
+          id: category.id,
+        });
+      }
+      return acc;
+    }, [] as CategoryTotal[]) || [];
 
   const COLORS = [
     "hsl(221.2 83.2% 53.3%)", // Primary blue
@@ -84,11 +97,11 @@ const SpendingCategories = () => {
         </Typography>
         <PeriodSelector
           selectedPeriod={selectedPeriod}
-          setSelectedPeriod={setSelectedPeriod}
+          setSelectedPeriod={(period: Period) => setSelectedPeriod(period)}
         />
       </div>
-      <div className="h-[250px]">
-        <ResponsiveContainer width="100%" height="100%">
+      {expenseData?.expenses.length ? (
+        <ResponsiveContainer width="100%" height={250}>
           <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
             <Pie
               data={categoryTotals}
@@ -121,7 +134,12 @@ const SpendingCategories = () => {
             <Legend content={<CustomizedLegend />} />
           </PieChart>
         </ResponsiveContainer>
-      </div>
+      ) : (
+        <EmptyState
+          title="No expenses found"
+          description="Please add some expenses"
+        />
+      )}
     </div>
   );
 };

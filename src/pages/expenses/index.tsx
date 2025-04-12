@@ -4,7 +4,7 @@ import { Expense } from "../../types/expense";
 import ExpenseRow from "./components/ExpenseRow/ExpenseRow";
 import Typography from "@/components/common/Typography/Typography";
 import { Categories, Category } from "@/constants/expense";
-import { X } from "lucide-react";
+import { X, Plus, Import } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -19,6 +19,9 @@ import expensesThunks from "@/store/thunks/transactions";
 import StateRenderer from "@/components/layout/StateRenderer/StateRenderer";
 import { STATUS } from "@/types/common";
 import Spinner from "@/components/common/Spinner/Spinner";
+import EmptyState from "@/components/shared/EmptyState";
+import { Link } from "react-router";
+import { setImportModal } from "@/store/slices/uiSlice";
 interface ExpenseGroup {
   date: string;
   expenses: Expense[];
@@ -86,12 +89,15 @@ const Expenses = () => {
     });
   };
 
+  console.log({ expenseStatus, expenseData });
+
   return (
     <StateRenderer
+      LayoutWrapper={({ children }) => children}
       isLoading={expenseStatus === STATUS.LOADING}
       isSuccess={expenseStatus === STATUS.SUCCESS}
       isFailure={expenseStatus === STATUS.ERROR}
-      LayoutWrapper={({ children }) => children}
+      failure={() => <div>Error loading expenses</div>}
       default={() => <div>No expenses found</div>}
       loading={() => (
         <div className="flex justify-center items-center h-full">
@@ -99,7 +105,7 @@ const Expenses = () => {
         </div>
       )}
       success={() => (
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full">
           <div className="sticky top-0 z-10  p-4 bg-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -147,44 +153,75 @@ const Expenses = () => {
                 </Select>
               </div>
 
-              <Button variant="outline" onClick={clearFilters}>
+              <Button
+                variant="outline"
+                onClick={clearFilters}
+                disabled={filters.month === "all" && filters.category === "all"}
+              >
                 <X className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
-          {groupedExpenses.map((group) => (
-            <div
-              key={group.date}
-              className="flex flex-col gap-2 bg-white  border-gray-200 overflow-hidden"
-            >
-              <div className="flex justify-between items-center py-3 px-4 bg-gray-50 border-b border-gray-200">
-                <Typography variant="h6" className="text-gray-700">
-                  {group.date}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  className={`font-medium ${
-                    group.total < 0 ? "text-red-600" : "text-green-600"
-                  }`}
-                >
-                  {new Intl.NumberFormat("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  }).format(group.total)}
-                </Typography>
-              </div>
+          {groupedExpenses.length > 0 ? (
+            groupedExpenses.map((group) => (
+              <div
+                key={group.date}
+                className="flex flex-col gap-2 bg-white  border-gray-200 overflow-hidden"
+              >
+                <div className="flex justify-between items-center py-3 px-4 bg-gray-50 border-b border-gray-200">
+                  <Typography variant="h6" className="text-gray-700">
+                    {group.date}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    className={`font-medium ${
+                      group.total < 0 ? "text-red-600" : "text-green-600"
+                    }`}
+                  >
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(group.total)}
+                  </Typography>
+                </div>
 
-              <div className="flex flex-col">
-                {group.expenses.map((expense) => (
-                  <ExpenseRow key={expense.id} expense={expense} />
-                ))}
+                <div className="flex flex-col">
+                  {group.expenses.map((expense) => (
+                    <ExpenseRow key={expense.id} expense={expense} />
+                  ))}
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="flex justify-center items-center h-full">
+              <EmptyState
+                title="No expenses found"
+                description="Please add some expenses"
+                actions={
+                  <div className="flex flex-col gap-4 mt-4 w-full">
+                    <Button
+                      variant="outline"
+                      onClick={() => dispatch(setImportModal({ open: true }))}
+                    >
+                      <Import className="h-4 w-4" />
+                      Import
+                    </Button>
+                    <Link to="/transaction/expense">
+                      <Button className="w-full">
+                        <Plus className="h-4 w-4" />
+                        Add Expense
+                      </Button>
+                    </Link>
+                  </div>
+                }
+                size="large"
+                className="max-w-sm"
+              />
             </div>
-          ))}
+          )}
         </div>
       )}
-      failure={() => <div>Error loading expenses</div>}
     />
   );
 };

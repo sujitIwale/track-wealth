@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-
+import { Period } from "@/types/common";
 interface PeriodSelectorProps {
-  selectedPeriod: string;
-  setSelectedPeriod: (period: string) => void;
+  selectedPeriod: Period;
+  setSelectedPeriod: (period: Period) => void;
 }
 
 const PeriodSelector = ({
