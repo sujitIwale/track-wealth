@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@/types/user";
+import { updateCurrency } from "../thunks/user";
 
 type UserState = {
   user: User | null;
@@ -29,6 +30,12 @@ const userSlice = createSlice({
         state.currency = action.payload.currency;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(updateCurrency.fulfilled, (state, action:PayloadAction<null, string, { arg: string }>) => {
+      const currency = action.meta.arg;
+      state.currency = currency;
+    });
   },
 });
 

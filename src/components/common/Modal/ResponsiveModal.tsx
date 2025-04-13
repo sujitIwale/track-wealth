@@ -5,6 +5,7 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { useDevice } from "@/contexts/device/DeviceContext";
+import { cn } from "@/lib/utils";
 import { useRef } from "react";
 import { BottomSheet, BottomSheetRef } from "react-spring-bottom-sheet";
 
@@ -14,6 +15,9 @@ type ResponsiveModalProps = {
   onClose: () => void;
   headerContent?: React.ReactNode;
   footerContent?: React.ReactNode;
+  footerClassName?: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
 };
 
 const ResponsiveModal = ({
@@ -22,6 +26,9 @@ const ResponsiveModal = ({
   onClose,
   headerContent,
   footerContent,
+  footerClassName,
+  size = "md",
+  className,
 }: ResponsiveModalProps) => {
   const sheetRef = useRef<BottomSheetRef | null>(null);
   const { isMobile } = useDevice();
@@ -33,7 +40,7 @@ const ResponsiveModal = ({
         open={isOpen}
         className="z-1000 relative"
         header={headerContent}
-        footer={footerContent}
+        footer={<div className={footerClassName}>{footerContent}</div>}
         ref={sheetRef}
         onDismiss={onClose}
         expandOnContentDrag
@@ -47,15 +54,28 @@ const ResponsiveModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="z-1000 w-full max-w-[90vw]! max-h-[90vh] overflow-auto p-0">
+      <DialogContent
+        className={cn(
+          "z- max-w-[90vw]! max-h-[90vh] overflow-auto p-0",
+          size === "sm" && "max-w-[400px]!",
+          size === "md" && "max-w-[600px]!",
+          size === "lg" && "max-w-[800px]!",
+          className
+        )}
+      >
         {headerContent && (
           <DialogHeader className="sticky top-0 bg-background border-b p-4 z-1000">
             {headerContent}
           </DialogHeader>
         )}
-        <div className="w-full h-full overflow-auto p-4">{children}</div>
+        <div className="w-full h-full overflow-auto">{children}</div>
         {footerContent && (
-          <DialogFooter className="sticky bottom-0 bg-background border-t p-4">
+          <DialogFooter
+            className={cn(
+              "sticky bottom-0 bg-background border-t p-4",
+              footerClassName
+            )}
+          >
             {footerContent}
           </DialogFooter>
         )}

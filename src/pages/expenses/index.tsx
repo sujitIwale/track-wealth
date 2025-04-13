@@ -105,7 +105,7 @@ const Expenses = () => {
         </div>
       )}
       success={() => (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col">
           <div className="sticky top-0 z-10  p-4 bg-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

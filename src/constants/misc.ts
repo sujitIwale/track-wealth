@@ -13,3 +13,5 @@ export const currencies = [
     acc[currency.code] = currency;
     return acc;
   }, {} as Record<string, typeof currencies[number]>);
+
+  export type Currency = (typeof currencies)[number]['code'];

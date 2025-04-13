@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { zIndex } from "@/constants/styles";
+
 interface SelectorProps {
   list: {
     id: string;
@@ -31,7 +31,7 @@ const Selector = ({ list, value, onValueChange }: SelectorProps) => {
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className={zIndex.select}>
+      <SelectContent>
         <SelectGroup>
           <SelectLabel>Categories</SelectLabel>
           {list.map((category) => (

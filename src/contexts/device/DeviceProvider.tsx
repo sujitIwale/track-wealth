@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import DeviceContext from "./DeviceContext";
 
 const DeviceProvider = ({ children }: { children: React.ReactNode }) => {
-  const [device, setDevice] = useState<"mobile" | "desktop" | null>(null);
+  const [device, setDevice] = useState<"mobile" | "desktop">("desktop");
 
   useEffect(() => {
     const handleResize = () => {

@@ -43,13 +43,9 @@ const Overview = () => {
     fetchData(selectedPeriod);
   }, [selectedPeriod, fetchData]);
 
-  if (!expenseData || !incomeData) {
-    return <div>No data found</div>;
-  }
-
   return (
-    <div className="flex flex-col gap-4 px-4 py-6 rounded-lg w-full sm:w-2/3 sm:border sm:border-gray-200">
-      <div className="flex justify-between px-4 sm:px-0">
+    <div className="flex flex-col gap-4 py-6 px-0 sm:px-4 rounded-lg w-full sm:w-2/3 sm:border sm:border-gray-200">
+      <div className="flex justify-between">
         <div className="flex flex-col justify-between">
           <Typography
             variant="subtitle2"
@@ -75,14 +71,14 @@ const Overview = () => {
       <div className="flex justify-center sm:justify-start gap-8 px-4 sm:px-0">
         <TransactionInfo
           title="Income"
-          amount={incomeData?.sum}
+          amount={incomeData?.sum ?? 0}
           currency="USD"
           sent={true}
           change={10}
         />
         <TransactionInfo
           title="Expenses"
-          amount={expenseData?.sum}
+          amount={expenseData?.sum ?? 0}
           currency="USD"
           sent={false}
           change={10}
@@ -93,8 +89,8 @@ const Overview = () => {
           <Skeleton className="h-[200px] w-full" />
         ) : incomeData?.incomes?.length || expenseData?.expenses?.length ? (
           <LineChart
-            incomes={incomeData?.incomes}
-            expenses={expenseData?.expenses}
+            incomes={incomeData?.incomes ?? []}
+            expenses={expenseData?.expenses ?? []}
           />
         ) : (
           <EmptyState
