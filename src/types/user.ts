@@ -1,3 +1,5 @@
+import { Currency } from "@/constants/misc";
+
 export type User = {
   id: string;
   email: string;
@@ -6,6 +8,6 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   onboarded: boolean;
-  currency: string | null;
+  currency: Currency | null;
   addedTransaction: boolean;
 };

@@ -9,7 +9,7 @@ import { List } from "lucide-react";
 import { IoMdAdd } from "react-icons/io";
 import { IoIosWallet } from "react-icons/io";
 import { IoIosSettings } from "react-icons/io";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 const iconsMap = {
   house: <House size={28} />,
@@ -20,11 +20,8 @@ const iconsMap = {
 };
 
 const Sidebar = () => {
+  const location = useLocation();
   const dispatch = useAppDispatch();
-  // Find the nav item that matches the current path.
-  const currentItem = desktopNavItems.find(
-    (item) => item.href === location.pathname
-  ) || { name: "App" };
 
   return (
     <aside className="flex flex-col justify-between px-8 py-4 w-[240px] border-r border-gray-200">
@@ -32,18 +29,23 @@ const Sidebar = () => {
         <Logo />
         <nav className="flex flex-col gap-8 w-full mt-16">
           {desktopNavItems.map((item, index) => {
+            const isActive = location.pathname === item.href;
             return (
               <Link
                 to={item.href!}
                 key={index}
                 className={cn(
-                  "flex items-center gap-2",
-                  currentItem.name === item.name
-                    ? "text-gray-900"
-                    : "text-gray-500"
+                  "flex items-center gap-2 transition-colors",
+                  isActive
+                    ? "text-primary font-medium"
+                    : "text-gray-600 hover:text-gray-900"
                 )}
               >
-                {iconsMap[item.icon as keyof typeof iconsMap]}
+                <div
+                  className={cn(isActive ? "text-primary" : "text-gray-500")}
+                >
+                  {iconsMap[item.icon as keyof typeof iconsMap]}
+                </div>
                 <span className="text-sm font-bold">{item.name}</span>
               </Link>
             );
