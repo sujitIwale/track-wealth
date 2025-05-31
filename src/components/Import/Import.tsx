@@ -210,6 +210,7 @@ const Import = () => {
     <ResponsiveModal
       isOpen={open}
       onClose={handleClose}
+      size="lg"
       headerContent={
         uploadState.status === STATUS.SUCCESS ? (
           <div className="flex justify-between items-center">

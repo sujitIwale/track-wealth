@@ -95,6 +95,7 @@ const getCell = (
           type="text"
           value={transaction[column.id]}
           onChange={(e) => onEditTransaction(index, column.id, e.target.value)}
+          className="w-auto"
         />
       );
     case "number":
@@ -103,6 +104,7 @@ const getCell = (
           type="number"
           value={transaction[column.id]}
           onChange={(e) => onEditTransaction(index, column.id, e.target.value)}
+          className="w-auto"
         />
       );
     case "select":
@@ -150,7 +152,7 @@ const TransactionsTable = ({
     transactions.length > 0;
 
   return (
-    <div className="overflow-hidden max-sm:overflow-auto">
+    <div className="overflow-auto">
       <table className="w-full relative">
         <thead className="bg-white">
           <tr className="border-b text-left bg-white">

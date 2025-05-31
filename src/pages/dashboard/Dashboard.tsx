@@ -31,7 +31,7 @@ const Dashboard = () => {
               {isMobile ? (
                 <div className="flex flex-col gap-4">
                   <Overview />
-                  <div className="px-4 py-6">
+                  <div className="py-6">
                     <SpendingCategories />
                   </div>
                 </div>
