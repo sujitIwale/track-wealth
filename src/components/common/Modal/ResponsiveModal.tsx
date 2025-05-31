@@ -40,7 +40,11 @@ const ResponsiveModal = ({
         open={isOpen}
         className="z-1000 relative"
         header={headerContent}
-        footer={<div className={footerClassName}>{footerContent}</div>}
+        footer={
+          footerContent ? (
+            <div className={footerClassName}>{footerContent}</div>
+          ) : null
+        }
         ref={sheetRef}
         onDismiss={onClose}
         expandOnContentDrag

@@ -50,9 +50,9 @@ const Uploader = forwardRef<HTMLInputElement, UploaderProps>(
     };
 
     return (
-      <div className="flex flex-col gap-4">
+      <div className="p-4">
         <div
-          className={`border-2 max-sm:border-none border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
             isDragging
               ? "border-primary bg-primary/5"
               : "border-gray-300 hover:border-primary hover:bg-primary/5"

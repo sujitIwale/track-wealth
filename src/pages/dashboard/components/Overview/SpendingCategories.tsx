@@ -93,7 +93,7 @@ const SpendingCategories = () => {
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-4">
         <Typography variant="subtitle1" className="font-medium text-nowrap">
-          Spending By Category
+          Spending by category
         </Typography>
         <PeriodSelector
           selectedPeriod={selectedPeriod}

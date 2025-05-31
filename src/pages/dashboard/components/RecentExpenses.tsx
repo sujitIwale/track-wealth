@@ -25,7 +25,7 @@ const RecentExpenses = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center px-4 my-4">
+      <div className="flex justify-between items-center my-4">
         <Typography variant="h6" className="text-gray-600">
           Recent Expenses
         </Typography>
