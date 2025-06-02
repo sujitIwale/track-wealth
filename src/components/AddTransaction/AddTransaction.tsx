@@ -10,11 +10,10 @@ import { useParams, useNavigate } from "react-router";
 import ExpenseForm from "./components/ExpenseForm";
 import IncomeForm from "./components/IncomeForm";
 import { incomesApi } from "@/api/transaction";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { expensesApi } from "@/api/transaction";
 import { useAppSelector } from "@/store/store";
-import { BottomSheet, BottomSheetRef } from "react-spring-bottom-sheet";
-import "react-spring-bottom-sheet/dist/style.css";
+import ResponsiveModal from "../common/Modal/ResponsiveModal";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
@@ -26,11 +25,11 @@ const initialExpense: ExpenseBase = {
 };
 
 type ModalContentProps = {
-  expenseId?: string | null;
-  onClose?: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-const ModalContent = ({ onClose }: ModalContentProps) => {
+const ModalContent = ({ isOpen, onClose }: ModalContentProps) => {
   const { type, id } = useParams();
   const currency = useAppSelector((state) => state.user.currency);
   const { setExpense, setIncome, save, reset, status } = useTransaction();
@@ -85,30 +84,44 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between py-4 px-2">
-        <Button variant="ghost" size="icon" onClick={handleClose}>
-          <X />
-        </Button>
-        <h2 className="pl-7">
-          {type === "expense"
-            ? `${id ? "Edit" : "Add"} Expense`
-            : `${id ? "Edit" : "Add"} Income`}
-        </h2>
-        <Button
-          size="icon"
-          variant="ghost"
-          onClick={handleSave}
-          disabled={status === STATUS.LOADING}
-          className="w-10 h-10"
-        >
-          {status === STATUS.LOADING ? (
-            <Spinner />
-          ) : (
-            <Check className="w-6 h-6" />
-          )}
-        </Button>
-      </div>
+    <ResponsiveModal
+      isOpen={isOpen}
+      onClose={onClose}
+      headerContent={
+        <div className="flex items-center justify-between py-4 px-2">
+          <Button variant="ghost" size="icon" onClick={handleClose}>
+            <X />
+          </Button>
+          <h2 className="pl-7">
+            {type === "expense"
+              ? `${id ? "Edit" : "Add"} Expense`
+              : `${id ? "Edit" : "Add"} Income`}
+          </h2>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={handleSave}
+            disabled={status === STATUS.LOADING}
+            className="w-10 h-10"
+          >
+            {status === STATUS.LOADING ? (
+              <Spinner />
+            ) : (
+              <Check className="w-6 h-6" />
+            )}
+          </Button>
+        </div>
+      }
+    >
+      {/* <BottomSheet
+  open={open ?? false}
+  ref={sheetRef}
+  onDismiss={onClose}
+  expandOnContentDrag
+>
+  <ModalContent onClose={onClose} />
+</BottomSheet> */}
+
       <div className="flex flex-col gap-4 p-4 overflow-y-auto pb-[70px]">
         <div className="flex justify-center mb-6">
           <Switch
@@ -122,7 +135,7 @@ const ModalContent = ({ onClose }: ModalContentProps) => {
           <IncomeForm currency={currency} />
         )}
       </div>
-    </>
+    </ResponsiveModal>
   );
 };
 
@@ -131,8 +144,6 @@ type AddTransactionProps = {
 };
 
 const AddTransaction = ({ open }: AddTransactionProps) => {
-  const sheetRef = useRef<BottomSheetRef | null>(null);
-
   const navigate = useNavigate();
   const onClose = () => {
     navigate("/dashboard");
@@ -140,14 +151,7 @@ const AddTransaction = ({ open }: AddTransactionProps) => {
 
   return (
     <TransactionProvider>
-      <BottomSheet
-        open={open ?? false}
-        ref={sheetRef}
-        onDismiss={onClose}
-        expandOnContentDrag
-      >
-        <ModalContent onClose={onClose} />
-      </BottomSheet>
+      <ModalContent isOpen={open ?? false} onClose={onClose} />
     </TransactionProvider>
   );
 };
