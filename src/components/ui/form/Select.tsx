@@ -20,7 +20,9 @@ const Select = ({ label, value, options, onChange }: SelectProps) => {
         className="outline-none cursor-pointer"
       >
         {options.map((option, ind) => (
-          <option key={option.id || ind}>{option.label}</option>
+          <option key={option.id || ind} value={option.value}>
+            {option.label}
+          </option>
         ))}
       </select>
     </FormField>

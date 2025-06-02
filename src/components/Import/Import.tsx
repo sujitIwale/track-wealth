@@ -211,6 +211,7 @@ const Import = () => {
       isOpen={open}
       onClose={handleClose}
       size="lg"
+      headerClassName="p-4"
       headerContent={
         uploadState.status === STATUS.SUCCESS ? (
           <div className="flex justify-between items-center">

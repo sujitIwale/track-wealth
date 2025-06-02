@@ -4,4 +4,8 @@
     background-size: 50% 50%;
     background-position: bottom left, bottom right;
     background-repeat: no-repeat;
-  }
+}
+
+[data-rsbs-header] {
+  padding: 0 !important;
+}

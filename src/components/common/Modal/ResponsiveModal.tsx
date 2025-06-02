@@ -8,6 +8,7 @@ import { useDevice } from "@/contexts/device/DeviceContext";
 import { cn } from "@/lib/utils";
 import { useRef } from "react";
 import { BottomSheet, BottomSheetRef } from "react-spring-bottom-sheet";
+import "react-spring-bottom-sheet/dist/style.css";
 
 type ResponsiveModalProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ type ResponsiveModalProps = {
   headerContent?: React.ReactNode;
   footerContent?: React.ReactNode;
   footerClassName?: string;
+  headerClassName?: string;
   size?: "sm" | "md" | "lg";
   className?: string;
 };
@@ -27,19 +29,25 @@ const ResponsiveModal = ({
   headerContent,
   footerContent,
   footerClassName,
+  headerClassName,
   size = "md",
   className,
 }: ResponsiveModalProps) => {
   const sheetRef = useRef<BottomSheetRef | null>(null);
   const { isMobile } = useDevice();
 
-  console.log({ isMobile });
   if (isMobile) {
     return (
       <BottomSheet
         open={isOpen}
-        className="z-1000 relative"
-        header={headerContent}
+        className="z-1000 relative min-h-screen overflow-auto"
+        header={
+          headerContent ? (
+            <div className={cn("text-left", headerClassName)}>
+              {headerContent}
+            </div>
+          ) : null
+        }
         footer={
           footerContent ? (
             <div className={footerClassName}>{footerContent}</div>
@@ -57,10 +65,10 @@ const ResponsiveModal = ({
   console.log({ isOpen });
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose} modal>
       <DialogContent
         className={cn(
-          "z- max-w-[90vw]! max-h-[90vh] overflow-auto p-0",
+          "max-w-[90vw]! max-h-[90vh] overflow-auto p-0",
           size === "sm" && "max-w-[400px]!",
           size === "md" && "max-w-[600px]!",
           size === "lg" && "max-w-[800px]!",
@@ -68,7 +76,12 @@ const ResponsiveModal = ({
         )}
       >
         {headerContent && (
-          <DialogHeader className="sticky top-0 bg-background border-b p-4 z-1000">
+          <DialogHeader
+            className={cn(
+              "sticky top-0 bg-background border-b z-1000",
+              headerClassName
+            )}
+          >
             {headerContent}
           </DialogHeader>
         )}

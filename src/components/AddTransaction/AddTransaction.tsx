@@ -88,7 +88,7 @@ const ModalContent = ({ isOpen, onClose }: ModalContentProps) => {
       isOpen={isOpen}
       onClose={onClose}
       headerContent={
-        <div className="flex items-center justify-between py-4 px-2">
+        <div className="flex items-center justify-between p-4">
           <Button variant="ghost" size="icon" onClick={handleClose}>
             <X />
           </Button>
