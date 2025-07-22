@@ -7,12 +7,12 @@ import {
   Upload,
   Star,
   Github,
-  Twitter,
   Linkedin,
   Menu,
   X,
   Plus,
   BarChart3,
+  Globe,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -455,19 +455,30 @@ const Index = () => {
                 >
                   <Github className="w-5 h-5" />
                 </a>
-                <a
+                {/* <a
                   href="https://twitter.com"
                   className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
                   aria-label="Twitter"
                 >
                   <Twitter className="w-5 h-5" />
-                </a>
+                </a> */}
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/sujitIwale/"
                   className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
                   aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Linkedin className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://www.sujitiwale.info/"
+                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                  aria-label="Website"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Globe className="w-5 h-5" />
                 </a>
               </div>
               <div className="flex items-center space-x-2 text-sm">

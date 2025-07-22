@@ -45,7 +45,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex items-center justify-between p-4 sticky top-0 left-0 right-0 bg-white z-40 sm:justify-end">
-      {isMobile ? <Logo isMobile={isMobile} /> : null}
+      {isMobile ? <Logo /> : null}
       {isMobile ? (
         <span className="ml-3 text-lg font-semibold">{currentItem.name}</span>
       ) : null}
