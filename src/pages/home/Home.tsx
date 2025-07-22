@@ -1,412 +1,493 @@
-import { Link } from "react-router";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import Logo from "@/components/shared/Logo";
 import {
   ArrowRight,
-  BarChart2,
-  DollarSign,
-  PieChart,
   TrendingUp,
+  Upload,
+  Star,
+  Github,
+  Twitter,
+  Linkedin,
+  Menu,
+  X,
+  Plus,
+  BarChart3,
 } from "lucide-react";
+import { useState } from "react";
 
-const Home = () => {
+const Index = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <div className="min-h-screen flex flex-col h-screen overflow-y-auto">
+    <div className="min-h-screen bg-background h-screen overflow-y-auto">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-indigo-600">WealthAI</h1>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Logo />
+            </div>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <a
+                href="#features"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                Features
+              </a>
+              <a
+                href="#how-it-works"
+                className="text-sm font-medium hover:text-primary transition-colors"
+              >
+                How it Works
+              </a>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" className="hidden md:inline-flex" asChild>
+                <a href="/auth">Sign Up</a>
+              </Button>
+              <Button asChild>
+                <a href="/auth">Login</a>
+              </Button>
+
+              {/* Mobile Menu Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </Button>
+            </div>
           </div>
-          <nav className="hidden md:flex space-x-8">
-            <a
-              href="#features"
-              className="text-gray-600 hover:text-indigo-600 transition-colors"
-            >
-              Features
-            </a>
-            <a
-              href="#benefits"
-              className="text-gray-600 hover:text-indigo-600 transition-colors"
-            >
-              Benefits
-            </a>
-            <a
-              href="#testimonials"
-              className="text-gray-600 hover:text-indigo-600 transition-colors"
-            >
-              Testimonials
-            </a>
-          </nav>
-          <div className="flex space-x-4">
-            <Link
-              to="/auth"
-              className="px-4 py-2 text-indigo-600 hover:text-indigo-800 transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              to="/auth"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-            >
-              Sign Up
-            </Link>
-          </div>
+
+          {/* Mobile Navigation */}
+          {isMenuOpen && (
+            <nav className="md:hidden py-4 space-y-2 border-t">
+              <a
+                href="#features"
+                className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              >
+                Features
+              </a>
+              <a
+                href="#how-it-works"
+                className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              >
+                How it Works
+              </a>
+            </nav>
+          )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Keep Your Wealth At One Place
-              </h2>
-              <p className="text-xl mb-8">
-                Track your expenses, income, investments, and discover new
-                investment opportunities with our AI-powered platform.
-              </p>
-              <Link
-                to="/auth"
-                className="inline-flex items-center px-6 py-3 bg-white text-indigo-600 rounded-md hover:bg-gray-100 transition-colors font-medium"
-              >
-                Get Started <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+      <section className="py-20 lg:py-32">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center space-y-8 max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/20">
+              <TrendingUp className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                Take control of your finances
+              </span>
             </div>
-            <div className="md:w-1/2">
-              <img
-                src="/src/assets/dashboard-preview.png"
-                alt="Dashboard Preview"
-                className="rounded-lg shadow-xl"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://placehold.co/600x400?text=WealthAI+Dashboard";
-                }}
-              />
+
+            <div className="space-y-6">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent leading-tight">
+                Smart Wealth
+                <br />
+                <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+                  Management with AI
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                Track expenses, import transactions, and gain AI-powered
+                insights into your spending habits with our intelligent wealth
+                management platform.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button size="lg" className="group" asChild>
+                <a href="/auth">
+                  Get Started
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href="#how-it-works">Learn More</a>
+              </Button>
+            </div>
+
+            {/* Hero Image */}
+            <div className="mt-16 relative">
+              <div className="rounded-xl border bg-muted/50 p-2 backdrop-blur">
+                <img
+                  src="/images/landing/app-overview.webp"
+                  alt="Wealth AI Dashboard Overview - AI-powered expense tracking with beautiful analytics and insights"
+                  className="w-full h-auto rounded-lg shadow-2xl"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">
-            All Your Finances in One Place
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <DollarSign className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Expense Tracking</h3>
-              <p className="text-gray-600">
-                Monitor your daily expenses and categorize them automatically
-                with our AI technology.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <TrendingUp className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Income Management</h3>
-              <p className="text-gray-600">
-                Track multiple income streams and get insights on your earning
-                patterns.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <PieChart className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">
-                Investment Portfolio
-              </h3>
-              <p className="text-gray-600">
-                Manage all your investments in one dashboard with real-time
-                updates and performance metrics.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <div className="bg-indigo-100 p-3 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                <BarChart2 className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">
-                Investment Opportunities
-              </h3>
-              <p className="text-gray-600">
-                Discover personalized investment opportunities based on your
-                financial goals and risk profile.
-              </p>
-            </div>
+      <section id="features" className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Everything you need to manage expenses
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Powerful features designed to make expense tracking effortless and
+              insightful.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* Benefits Section */}
-      <section id="benefits" className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-10 md:mb-0">
-              <img
-                src="/src/assets/financial-freedom.png"
-                alt="Financial Freedom"
-                className="rounded-lg shadow-xl"
-                onError={(e) => {
-                  e.currentTarget.src =
-                    "https://placehold.co/600x400?text=Financial+Freedom";
-                }}
-              />
-            </div>
-            <div className="md:w-1/2 md:pl-12">
-              <h2 className="text-3xl font-bold mb-6">
-                Take Control of Your Financial Future
-              </h2>
+          <div className="grid lg:grid-cols-3 gap-8">
+            <Card className="p-8 border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-300 group">
               <div className="space-y-6">
-                <div className="flex">
-                  <div className="flex-shrink-0 mt-1">
-                    <div className="h-6 w-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                      ✓
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Smart Insights</h3>
-                    <p className="text-gray-600">
-                      Get AI-powered insights to optimize your spending and
-                      saving habits.
-                    </p>
-                  </div>
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Plus className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex">
-                  <div className="flex-shrink-0 mt-1">
-                    <div className="h-6 w-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                      ✓
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Goal Setting</h3>
-                    <p className="text-gray-600">
-                      Set financial goals and track your progress with
-                      customized dashboards.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex">
-                  <div className="flex-shrink-0 mt-1">
-                    <div className="h-6 w-6 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
-                      ✓
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h3 className="text-xl font-semibold">Secure & Private</h3>
-                    <p className="text-gray-600">
-                      Bank-level security ensures your financial data is always
-                      protected.
-                    </p>
-                  </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Easy Expense Entry
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Add expenses in seconds with our intuitive interface.
+                    Categorize, add notes, and attach receipts effortlessly.
+                  </p>
                 </div>
               </div>
-            </div>
+            </Card>
+
+            <Card className="p-8 border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-300 group">
+              <div className="space-y-6">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <Upload className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Import Transactions
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Seamlessly import bank statements and credit card
+                    transactions. Support for CSV, OFX, and QIF formats.
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-8 border-border/50 bg-card/50 backdrop-blur-sm hover:bg-card/80 transition-all duration-300 group">
+              <div className="space-y-6">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <BarChart3 className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    Smart Analytics
+                  </h3>
+                  <p className="text-muted-foreground">
+                    Get detailed insights with beautiful charts and reports.
+                    Track spending patterns and set budgets.
+                  </p>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-16">
-            What Our Users Say
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-600 font-bold text-xl">
-                  JD
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center space-y-4 mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold">How it works</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Get started in minutes with our simple three-step process.
+            </p>
+          </div>
+
+          <div className="space-y-20">
+            {/* Step 1 */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-bold">
+                  1
                 </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold">John Doe</h3>
-                  <p className="text-gray-600 text-sm">Entrepreneur</p>
+                <h3 className="text-2xl md:text-3xl font-bold">
+                  Add Your First Expense
+                </h3>
+                <p className="text-lg text-muted-foreground">
+                  Start by adding your expenses manually or by taking a photo of
+                  your receipt. Our smart categorization will automatically sort
+                  your expenses.
+                </p>
+                <div className="flex gap-4">
+                  <Button asChild>
+                    <a href="/auth">Get Started</a>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <a href="#features">Learn More</a>
+                  </Button>
                 </div>
               </div>
-              <p className="text-gray-600">
-                "WealthAI has transformed how I manage my business and personal
-                finances. The insights have helped me save 20% more each month."
-              </p>
+              <div className="rounded-xl border bg-muted/50 p-4 backdrop-blur">
+                <img
+                  src="/images/landing/add-transaction.webp"
+                  alt="Add expense interface - Easy expense entry with smart categorization"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-600 font-bold text-xl">
-                  SJ
+
+            {/* Step 2 */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="rounded-xl border bg-muted/50 p-4 backdrop-blur lg:order-1">
+                <img
+                  src="/images/landing/import-transactions.webp"
+                  alt="Import transactions interface - Upload and import bank statements and CSV files"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+              <div className="space-y-6 lg:order-2">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-bold">
+                  2
                 </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold">Sarah Johnson</h3>
-                  <p className="text-gray-600 text-sm">Financial Analyst</p>
+                <h3 className="text-2xl md:text-3xl font-bold">
+                  Import Your Transactions
+                </h3>
+                <p className="text-lg text-muted-foreground">
+                  Connect your bank accounts or upload CSV files to
+                  automatically import all your transactions. Save hours of
+                  manual data entry.
+                </p>
+                <div className="flex gap-4">
+                  <Button asChild>
+                    <a href="/auth">Try Import</a>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <a href="#features">View Features</a>
+                  </Button>
                 </div>
               </div>
-              <p className="text-gray-600">
-                "As someone who works in finance, I'm impressed by the depth of
-                analysis WealthAI provides. It's like having a financial advisor
-                in your pocket."
-              </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-600 font-bold text-xl">
-                  MR
+
+            {/* Step 3 */}
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground text-xl font-bold">
+                  3
                 </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold">Michael Rodriguez</h3>
-                  <p className="text-gray-600 text-sm">Freelancer</p>
+                <h3 className="text-2xl md:text-3xl font-bold">
+                  Analyze & Optimize
+                </h3>
+                <p className="text-lg text-muted-foreground">
+                  View detailed reports, set budgets, and get insights into your
+                  spending patterns. Make informed decisions about your
+                  finances.
+                </p>
+                <div className="flex gap-4">
+                  <Button asChild>
+                    <a href="/auth">Start Tracking</a>
+                  </Button>
+                  <Button variant="outline" asChild>
+                    <a href="#features">See Features</a>
+                  </Button>
                 </div>
               </div>
-              <p className="text-gray-600">
-                "Managing irregular income was always a challenge until I found
-                WealthAI. Now I can plan ahead and invest with confidence."
-              </p>
+              <div className="rounded-xl border bg-muted/50 p-4 backdrop-blur">
+                <img
+                  src="/images/landing/imported-transactions.webp"
+                  alt="Analytics dashboard with imported transactions - View detailed reports and spending insights"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-indigo-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Take Control of Your Finances?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of users who have transformed their financial future
-            with WealthAI.
-          </p>
-          <Link
-            to="/auth"
-            className="inline-flex items-center px-8 py-4 bg-white text-indigo-600 rounded-md hover:bg-gray-100 transition-colors font-medium text-lg"
-          >
-            Start Your Free Trial <ArrowRight className="ml-2 h-5 w-5" />
-          </Link>
-          <p className="mt-4 text-indigo-200">
-            No credit card required. 14-day free trial.
-          </p>
+      <section className="py-20 bg-primary">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center space-y-8 max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground">
+              Ready to take control of your expenses?
+            </h2>
+            <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
+              Start tracking your expenses and gain insights into your spending
+              habits with this powerful expense tracker.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button size="lg" variant="secondary" className="group" asChild>
+                <a href="/auth">
+                  Get Started Now
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </a>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+                asChild
+              >
+                <a href="#features">Explore Features</a>
+              </Button>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">WealthAI</h3>
-              <p className="text-gray-400">
-                Your all-in-one financial management platform powered by
-                artificial intelligence.
+      <footer className="border-t bg-muted/30">
+        <div className="container mx-auto px-4 lg:px-8 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            {/* Brand */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <Logo />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                The smartest AI-powered way to track and manage your wealth.
               </p>
             </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Features</h4>
-              <ul className="space-y-2">
+
+            {/* Product */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">Product</h4>
+              <ul className="space-y-2 text-sm">
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="#features"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Expense Tracking
+                    Features
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="#how-it-works"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Income Management
+                    How it Works
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="https://github.com/sujitIwale/track-wealth"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Investment Portfolio
+                    Source Code
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="/auth"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Financial Insights
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Company</h4>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    Contact
+                    Get Started
                   </a>
                 </li>
               </ul>
             </div>
-            <div>
-              <h4 className="text-lg font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2">
+
+            {/* Company */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">About</h4>
+              <ul className="space-y-2 text-sm">
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="https://github.com/sujitIwale/track-wealth"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Privacy Policy
+                    Project Info
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="https://github.com/sujitIwale/track-wealth/issues"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Terms of Service
+                    Report Issues
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-400 hover:text-white transition-colors"
+                    href="https://github.com/sujitIwale/track-wealth/blob/main/README.md"
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Cookie Policy
+                    Documentation
                   </a>
                 </li>
               </ul>
+            </div>
+
+            {/* Connect */}
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold">Connect with me</h4>
+              <div className="flex space-x-4">
+                <a
+                  href="https://github.com/sujitIwale/track-wealth"
+                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                  aria-label="GitHub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                  aria-label="Twitter"
+                >
+                  <Twitter className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <Star className="w-4 h-4 text-yellow-500" />
+                <a
+                  href="https://github.com/sujitIwale/track-wealth"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Star on GitHub
+                </a>
+              </div>
             </div>
           </div>
-          <div className="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400">
-            <p>
-              &copy; {new Date().getFullYear()} WealthAI. All rights reserved.
+
+          <div className="border-t mt-8 pt-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              Made with ❤️ by <strong>Sujit Iwale</strong> • © 2024 Wealth AI.
+              All rights reserved.
             </p>
           </div>
         </div>
@@ -415,4 +496,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Index;
