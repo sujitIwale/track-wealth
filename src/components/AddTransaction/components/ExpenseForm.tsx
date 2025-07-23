@@ -14,13 +14,18 @@ import Selector from "./Selector";
 import { CategoriesList, AccountTypesList } from "@/constants/expense";
 
 const ExpenseForm = ({ currency }: { currency: string }) => {
-  const { expense, setExpense } = useTransaction();
+  const { expense, setExpense, validationErrors, clearValidationErrors } =
+    useTransaction();
 
   const handleChange = (
     key: keyof ExpenseBase,
     value: ExpenseBase[keyof ExpenseBase]
   ) => {
     setExpense((prev) => ({ ...prev, [key]: value }));
+    // Clear validation errors when user starts typing
+    if (validationErrors[key as keyof typeof validationErrors]) {
+      clearValidationErrors();
+    }
   };
 
   //   useEffect(() => {
@@ -54,11 +59,18 @@ const ExpenseForm = ({ currency }: { currency: string }) => {
           onValueChange={(val) => handleChange("accountType", val)}
         />
       </div>
-      <AmountInput
-        value={expense.amount}
-        onChange={(val) => handleChange("amount", val)}
-        currency={currency || "USD"}
-      />
+      <div className="flex flex-col gap-1">
+        <AmountInput
+          value={expense.amount}
+          onChange={(val) => handleChange("amount", val)}
+          currency={currency || "USD"}
+        />
+        {validationErrors.amount && (
+          <Typography variant="body2" className="text-red-500 text-sm">
+            {validationErrors.amount}
+          </Typography>
+        )}
+      </div>
       <div className="flex flex-col gap-1">
         <Typography variant="body2" color="secondary">
           Title
@@ -66,10 +78,20 @@ const ExpenseForm = ({ currency }: { currency: string }) => {
         <input
           type="text"
           placeholder="Enter expense title..."
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className={cn(
+            "w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            validationErrors.name
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300"
+          )}
           value={expense.name}
           onChange={(e) => handleChange("name", e.target.value)}
         />
+        {validationErrors.name && (
+          <Typography variant="body2" className="text-red-500 text-sm">
+            {validationErrors.name}
+          </Typography>
+        )}
       </div>
       <div className="flex flex-col gap-1">
         <Typography variant="body2" color="secondary">

@@ -32,7 +32,8 @@ type ModalContentProps = {
 const ModalContent = ({ isOpen, onClose }: ModalContentProps) => {
   const { type, id } = useParams();
   const currency = useAppSelector((state) => state.user.currency);
-  const { setExpense, setIncome, save, reset, status } = useTransaction();
+  const { setExpense, setIncome, save, reset, status, validationErrors } =
+    useTransaction();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -83,6 +84,8 @@ const ModalContent = ({ isOpen, onClose }: ModalContentProps) => {
     reset();
   };
 
+  const hasValidationErrors = Object.keys(validationErrors).length > 0;
+
   return (
     <ResponsiveModal
       isOpen={isOpen}
@@ -101,7 +104,7 @@ const ModalContent = ({ isOpen, onClose }: ModalContentProps) => {
             size="icon"
             variant="ghost"
             onClick={handleSave}
-            disabled={status === STATUS.LOADING}
+            disabled={status === STATUS.LOADING || hasValidationErrors}
             className="w-10 h-10"
           >
             {status === STATUS.LOADING ? (

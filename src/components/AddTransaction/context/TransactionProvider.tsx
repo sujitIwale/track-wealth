@@ -29,17 +29,56 @@ const initialIncome: IncomeBase = {
   date: Date.now(),
 };
 
+type ValidationErrors = {
+  amount?: string;
+  name?: string;
+};
+
 const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
   const [expense, setExpense] = useState<ExpenseBase>(initialExpense);
   const [income, setIncome] = useState<IncomeBase>(initialIncome);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
+    {}
+  );
 
   const [createExpense] = useCreateExpenseMutation();
   const [updateExpense] = useUpdateExpenseMutation();
   const [createIncome] = useCreateIncomeMutation();
   const [updateIncome] = useUpdateIncomeMutation();
 
+  const clearValidationErrors = () => {
+    setValidationErrors({});
+  };
+
+  const validate = (type: "expense" | "income"): boolean => {
+    const data = type === "expense" ? expense : income;
+    const errors: ValidationErrors = {};
+
+    // Validate amount
+    if (!data.amount || data.amount <= 0) {
+      errors.amount = "Amount must be greater than 0";
+    }
+
+    // Validate name
+    if (!data.name || data.name.trim() === "") {
+      errors.name = "Title is required";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const save = async (type: "expense" | "income", id?: string) => {
+    // Clear previous validation errors
+    clearValidationErrors();
+
+    // Validate the data before saving
+    if (!validate(type)) {
+      toast.error("Please fix the validation errors");
+      return false;
+    }
+
     try {
       setStatus(STATUS.LOADING);
       if (type === "expense") {
@@ -74,6 +113,7 @@ const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
     setExpense(initialExpense);
     setIncome(initialIncome);
     setStatus(STATUS.IDLE);
+    clearValidationErrors();
   };
 
   return (
@@ -84,6 +124,9 @@ const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
         income,
         setIncome,
         status,
+        validationErrors,
+        clearValidationErrors,
+        validate,
         save,
         reset,
       }}

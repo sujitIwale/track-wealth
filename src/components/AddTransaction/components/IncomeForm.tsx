@@ -17,13 +17,18 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 const IncomeForm = ({ currency }: { currency: string }) => {
-  const { income, setIncome } = useTransaction();
+  const { income, setIncome, validationErrors, clearValidationErrors } =
+    useTransaction();
 
   const handleChange = (
     key: keyof IncomeBase,
     value: IncomeBase[keyof IncomeBase]
   ) => {
     setIncome((prev) => ({ ...prev, [key]: value }));
+    // Clear validation errors when user starts typing
+    if (validationErrors[key as keyof typeof validationErrors]) {
+      clearValidationErrors();
+    }
   };
   return (
     <>
@@ -32,33 +37,48 @@ const IncomeForm = ({ currency }: { currency: string }) => {
           list={AccountTypesList}
           value={income.accountType}
           onValueChange={(val) =>
-            setIncome({ ...income, accountType: val as AccountType })
+            handleChange("accountType", val as AccountType)
           }
         />
         <Selector
           list={IncomeSourcesList}
           value={income.source}
-          onValueChange={(val) =>
-            setIncome({ ...income, source: val as IncomeSource })
-          }
+          onValueChange={(val) => handleChange("source", val as IncomeSource)}
         />
       </div>
-      <AmountInput
-        currency={currency}
-        value={income.amount}
-        onChange={(val) => setIncome({ ...income, amount: val })}
-      />
+      <div className="flex flex-col gap-1">
+        <AmountInput
+          currency={currency}
+          value={income.amount}
+          onChange={(val) => handleChange("amount", val)}
+        />
+        {validationErrors.amount && (
+          <Typography variant="body2" className="text-red-500 text-sm">
+            {validationErrors.amount}
+          </Typography>
+        )}
+      </div>
       <div className="flex flex-col gap-1">
         <Typography variant="body2" color="secondary">
           Title
         </Typography>
         <input
           type="text"
-          placeholder="Enter expense title..."
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Enter income title..."
+          className={cn(
+            "w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            validationErrors.name
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300"
+          )}
           value={income.name}
           onChange={(e) => handleChange("name", e.target.value)}
         />
+        {validationErrors.name && (
+          <Typography variant="body2" className="text-red-500 text-sm">
+            {validationErrors.name}
+          </Typography>
+        )}
       </div>
       <div className="flex flex-col gap-1">
         <Typography variant="body2" color="secondary">
