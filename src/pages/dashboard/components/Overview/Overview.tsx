@@ -43,7 +43,12 @@ const Overview = () => {
           >
             Your Total Balance
           </Typography>
-          <Typography variant="h4">{formatCurrency(1000, "USD")}</Typography>
+          <Typography variant="h4">
+            {formatCurrency(
+              (incomeData?.sum ?? 0) - (expenseData?.sum ?? 0),
+              "USD"
+            )}
+          </Typography>
         </div>
         <div className="flex gap-4">
           <PeriodSelector
