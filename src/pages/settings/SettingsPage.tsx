@@ -39,8 +39,8 @@ const Item = ({
 
 const SettingsPage = () => {
   const [isEditingCurrency, setIsEditingCurrency] = useState(false);
-  const user = useAppSelector((state) => state.user.user);
-  const currency = useAppSelector((state) => state.user.currency);
+  const user = useAppSelector((state) => state.user);
+  const currency = user?.currency;
 
   return (
     <div className="flex flex-col gap-4 px-4 sm:px-0">

@@ -14,9 +14,11 @@ import {
   useGetExpensesQuery,
   useGetIncomesQuery,
 } from "@/store/query/transaction";
+import { useAppSelector } from "@/store/store";
 
 const Overview = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.MONTH);
+  const currency = useAppSelector((state) => state.user.currency);
   const { data: expenseData, isLoading: isExpenseLoading } =
     useGetExpensesQuery({
       params: {
@@ -46,7 +48,7 @@ const Overview = () => {
           <Typography variant="h4">
             {formatCurrency(
               (incomeData?.sum ?? 0) - (expenseData?.sum ?? 0),
-              "USD"
+              currency
             )}
           </Typography>
         </div>

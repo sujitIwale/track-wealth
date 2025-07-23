@@ -36,7 +36,11 @@ const EditCurrencyModal = ({
       isOpen={isOpen}
       onClose={onClose}
       size="md"
-      headerContent={<Typography variant="h4">Edit Currency</Typography>}
+      headerContent={
+        <Typography variant="h4" className="p-4">
+          Edit Currency
+        </Typography>
+      }
       footerContent={
         <>
           <Button
