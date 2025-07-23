@@ -1,4 +1,3 @@
-import RecentExpenses from "./components/RecentExpenses";
 import Overview from "./components/Overview/Overview";
 import SpendingCategories from "./components/Overview/SpendingCategories";
 import { useDevice } from "@/contexts/device/DeviceContext";
@@ -9,13 +8,13 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import Typography from "@/components/common/Typography/Typography";
 import { Link } from "react-router";
 import StateRenderer from "@/components/layout/StateRenderer/StateRenderer";
+import RecentExpenses from "./components/RecentExpenses";
 
 const Dashboard = () => {
   const user = useAppSelector((state) => state.user);
   const { isMobile } = useDevice();
   const dispatch = useAppDispatch();
-
-  const addedTransaction = user?.user?.addedTransaction;
+  const addedTransaction = user?.addedTransaction;
 
   return (
     <StateRenderer

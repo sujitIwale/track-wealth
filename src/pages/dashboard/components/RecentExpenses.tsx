@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react";
-import { expensesApi } from "@/api/transaction";
 import Typography from "@/components/common/Typography/Typography";
-import { Expense } from "@/types/expense";
 import ExpenseRow from "@/pages/expenses/components/ExpenseRow/ExpenseRow";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
+import { useGetExpensesQuery } from "@/store/query/transaction";
 
 const RecentExpenses = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-
-  useEffect(() => {
-    const fetchRecentExpenses = async () => {
-      const recentExpenses = await expensesApi.getExpenses({
-        limit: 5,
-        order: "desc",
-        // sort: "date",
-        // order: "desc"
-      });
-      setExpenses(recentExpenses.expenses);
-    };
-
-    fetchRecentExpenses();
-  }, []);
+  const { data } = useGetExpensesQuery({
+    params: {
+      limit: 5,
+      order: "desc",
+    },
+  });
 
   return (
     <div>
@@ -34,11 +23,11 @@ const RecentExpenses = () => {
         </Link>
       </div>
       <div>
-        {expenses.map((expense) => (
+        {data?.expenses.map((expense) => (
           <ExpenseRow key={expense.id} expense={expense} />
         ))}
 
-        {expenses.length === 0 && (
+        {data?.expenses.length === 0 && (
           <Typography className="text-gray-500 text-center py-4">
             No recent expenses
           </Typography>

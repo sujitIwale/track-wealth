@@ -2,33 +2,41 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@/types/user";
 import { updateCurrency } from "../thunks/user";
 
-type UserState = {
-  user: User | null;
+type UserState = User & {
   currency: string;
-};
+}
 
 const initialState: UserState = {
-  user: null,
-  currency: "USD",
-};
+  id: "",
+  email: "",
+  name: null,
+  profilePicture: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  onboarded: false,
+  currency: 'INR',
+  addedTransaction: false,
+}
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
-      state.user = action.payload;
-      state.currency = action.payload?.currency || "USD";
+      console.log({ payload: action.payload });
+      state = {
+        ...state,
+        ...action.payload,
+      } as UserState;
+      return state;
     },
     updateUser: (state, action: PayloadAction<Partial<User>>) => {
-      state.user = {
-        ...state.user,
+      state = {
+        ...state,
         ...action.payload,
-      } as User;
+      } as UserState;
 
-      if (action.payload.currency) {
-        state.currency = action.payload.currency;
-      }
+      return state;
     },
   },
   extraReducers: (builder) => {

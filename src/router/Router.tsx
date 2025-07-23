@@ -10,6 +10,7 @@ import Onboarding from "@/pages/onboarding/Onboarding";
 import AddTransaction from "@/components/AddTransaction/AddTransaction";
 import Home from "@/pages/home/Home";
 import SettingsPage from "@/pages/settings/SettingsPage";
+import Budget from "@/pages/Budget";
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/expenses" element={<Expenses />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/budget" element={<Budget />} />
           </Route>
           <Route
             path="/transaction/:type/:id?"

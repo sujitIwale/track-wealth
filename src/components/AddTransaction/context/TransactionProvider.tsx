@@ -2,10 +2,14 @@ import { useState } from "react";
 import { TransactionContext } from "./TransactionContext";
 import { ExpenseBase } from "@/types/expense";
 import { IncomeBase } from "@/types/transaction";
-import { useAppDispatch } from "@/store/store";
 import { STATUS } from "@/types/common";
-import transactionsThunks from "@/store/thunks/transactions";
 import { toast } from "sonner";
+import {
+  useCreateExpenseMutation,
+  useUpdateExpenseMutation,
+  useCreateIncomeMutation,
+  useUpdateIncomeMutation,
+} from "@/store/query/transaction";
 
 const initialExpense: ExpenseBase = {
   amount: 0,
@@ -26,28 +30,32 @@ const initialIncome: IncomeBase = {
 };
 
 const TransactionProvider = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useAppDispatch();
   const [expense, setExpense] = useState<ExpenseBase>(initialExpense);
   const [income, setIncome] = useState<IncomeBase>(initialIncome);
   const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
+
+  const [createExpense] = useCreateExpenseMutation();
+  const [updateExpense] = useUpdateExpenseMutation();
+  const [createIncome] = useCreateIncomeMutation();
+  const [updateIncome] = useUpdateIncomeMutation();
 
   const save = async (type: "expense" | "income", id?: string) => {
     try {
       setStatus(STATUS.LOADING);
       if (type === "expense") {
         if (id) {
-          await dispatch(transactionsThunks.updateExpense({ id, expense }));
+          await updateExpense({ id, expense }).unwrap();
           toast.success("Expense updated successfully");
         } else {
-          await dispatch(transactionsThunks.createExpense(expense));
+          await createExpense(expense).unwrap();
           toast.success("Expense created successfully");
         }
       } else {
         if (id) {
-          await dispatch(transactionsThunks.updateIncome({ id, income }));
+          await updateIncome({ id, income }).unwrap();
           toast.success("Income updated successfully");
         } else {
-          await dispatch(transactionsThunks.createIncome(income));
+          await createIncome(income).unwrap();
           toast.success("Income created successfully");
         }
       }

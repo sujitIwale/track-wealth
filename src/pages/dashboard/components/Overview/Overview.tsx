@@ -1,6 +1,6 @@
 import Typography from "@/components/common/Typography/Typography";
-import { useCallback, useEffect, useState } from "react";
-import { Period, STATUS } from "@/types/common";
+import { useState } from "react";
+import { Period } from "@/types/common";
 import { Skeleton } from "@/components/ui/skeleton";
 import TransactionInfo from "@/components/TransactionInfo/TransactionInfo";
 import { formatCurrency } from "@/lib/utils";
@@ -9,39 +9,29 @@ import { Plus } from "lucide-react";
 import LineChart from "./LineChart";
 import { Link } from "react-router";
 import PeriodSelector from "@/components/shared/PeriodSelector";
-import { ExpenseData, IncomeData } from "@/store/types/data";
-import { getBothTransactions } from "@/lib/utils/transactions";
 import EmptyState from "@/components/shared/EmptyState";
+import {
+  useGetExpensesQuery,
+  useGetIncomesQuery,
+} from "@/store/query/transaction";
 
 const Overview = () => {
-  const [expenseData, setExpenseData] = useState<ExpenseData | null>(null);
-  const [incomeData, setIncomeData] = useState<IncomeData | null>(null);
-  const [status, setStatus] = useState<STATUS>(STATUS.IDLE);
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.MONTH);
+  const { data: expenseData, isLoading: isExpenseLoading } =
+    useGetExpensesQuery({
+      params: {
+        period: Period.MONTH,
+        giveSum: true,
+      },
+    });
+  const { data: incomeData, isLoading: isIncomeLoading } = useGetIncomesQuery({
+    params: {
+      period: Period.MONTH,
+      giveSum: true,
+    },
+  });
 
-  console.log({ expenseData, incomeData, selectedPeriod });
-
-  const fetchData = useCallback(async (period: Period = Period.MONTH) => {
-    setStatus(STATUS.LOADING);
-    try {
-      const { expneseData, incomeData } = await getBothTransactions(
-        period,
-        true
-      );
-      setExpenseData(expneseData);
-      setIncomeData(incomeData);
-      setStatus(STATUS.SUCCESS);
-    } catch (error) {
-      setStatus(STATUS.ERROR);
-      setExpenseData(null);
-      setIncomeData(null);
-      console.error(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData(selectedPeriod);
-  }, [selectedPeriod, fetchData]);
+  const isLoading = isExpenseLoading || isIncomeLoading;
 
   return (
     <div className="flex flex-col gap-4 py-6 px-0 sm:px-4 rounded-lg w-full sm:w-2/3 sm:border sm:border-gray-200">
@@ -85,7 +75,7 @@ const Overview = () => {
         />
       </div>
       <div className="flex grow gap-4">
-        {status === STATUS.LOADING ? (
+        {isLoading ? (
           <Skeleton className="h-[200px] w-full" />
         ) : incomeData?.incomes?.length || expenseData?.expenses?.length ? (
           <LineChart

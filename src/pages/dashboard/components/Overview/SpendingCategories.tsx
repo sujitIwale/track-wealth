@@ -2,10 +2,9 @@ import Typography from "@/components/common/Typography/Typography";
 import EmptyState from "@/components/shared/EmptyState";
 import PeriodSelector from "@/components/shared/PeriodSelector";
 import { Categories } from "@/constants/expense";
-import { getExpenses } from "@/lib/utils/transactions";
-import { ExpenseData } from "@/store/types/data";
+import { useGetExpensesQuery } from "@/store/query/transaction";
 import { Period } from "@/types/common";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -25,15 +24,11 @@ type CategoryTotal = {
 
 const SpendingCategories = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<Period>(Period.MONTH);
-  const [expenseData, setExpenseData] = useState<ExpenseData | null>(null);
-
-  useEffect(() => {
-    const fetchExpenseData = async () => {
-      const response = await getExpenses(selectedPeriod, false);
-      setExpenseData(response.data);
-    };
-    fetchExpenseData();
-  }, [selectedPeriod]);
+  const { data: expenseData } = useGetExpensesQuery({
+    params: {
+      period: Period.MONTH,
+    },
+  });
 
   // Process expenses to get category-wise totals
   const categoryTotals =

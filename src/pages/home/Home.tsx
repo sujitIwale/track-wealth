@@ -102,15 +102,15 @@ const Index = () => {
 
             <div className="space-y-6">
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent leading-tight">
-                Smart Wealth
+                Smart Money
                 <br />
                 <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                  Management with AI
+                  Tracker
                 </span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                Track expenses, import transactions, and gain AI-powered
-                insights into your spending habits with our intelligent wealth
+                Track expenses, import transactions, and gain detailed insights
+                into your spending habits with our comprehensive money
                 management platform.
               </p>
             </div>
@@ -132,7 +132,7 @@ const Index = () => {
               <div className="rounded-xl border bg-muted/50 p-2 backdrop-blur">
                 <img
                   src="/images/landing/app-overview.webp"
-                  alt="Wealth AI Dashboard Overview - AI-powered expense tracking with beautiful analytics and insights"
+                  alt="Money Tracker Dashboard Overview - Expense tracking with beautiful analytics and insights"
                   className="w-full h-auto rounded-lg shadow-2xl"
                 />
               </div>
@@ -360,7 +360,7 @@ const Index = () => {
                 <Logo />
               </div>
               <p className="text-sm text-muted-foreground">
-                The smartest AI-powered way to track and manage your wealth.
+                The smartest way to track and manage your money.
               </p>
             </div>
 
@@ -497,8 +497,8 @@ const Index = () => {
 
           <div className="border-t mt-8 pt-8 text-center">
             <p className="text-sm text-muted-foreground">
-              Made with ❤️ by <strong>Sujit Iwale</strong> • © 2024 Wealth AI.
-              All rights reserved.
+              Made with ❤️ by <strong>Sujit Iwale</strong> • © 2024 Track
+              Wealth. All rights reserved.
             </p>
           </div>
         </div>

@@ -7,8 +7,7 @@ import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useNavigate } from "react-router";
 import { Expense } from "@/types/expense";
-import { useAppDispatch } from "@/store/store";
-import expensesThunks from "@/store/thunks/transactions";
+import { useDeleteExpenseMutation } from "@/store/query/transaction";
 import { toast } from "sonner";
 
 type ExpenseRowMenuProps = {
@@ -16,17 +15,17 @@ type ExpenseRowMenuProps = {
 };
 
 const ExpenseRowMenu = ({ expense }: ExpenseRowMenuProps) => {
-  const dispatch = useAppDispatch();
+  const [deleteExpense] = useDeleteExpenseMutation();
   const navigate = useNavigate();
 
-  const handleDelete = () => {
-    dispatch(expensesThunks.deleteExpense(expense.id))
-      .then(() => {
-        toast.success("Expense deleted successfully");
-      })
-      .catch(() => {
-        toast.error("Failed to delete expense");
-      });
+  const handleDelete = async () => {
+    try {
+      await deleteExpense(expense.id).unwrap();
+      toast.success("Expense deleted successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete expense");
+    }
   };
 
   return (
@@ -51,7 +50,7 @@ const ExpenseRowMenu = ({ expense }: ExpenseRowMenuProps) => {
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => handleDelete()}
+          onClick={handleDelete}
           className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
         >
           Delete

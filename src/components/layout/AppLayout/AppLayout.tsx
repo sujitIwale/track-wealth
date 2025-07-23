@@ -17,13 +17,13 @@ const AppLayout = () => {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen">
+    <div className="flex flex-col sm:flex-row sm:overflow-hidden h-screen">
       {/* Centered container with fixed viewport height */}
       {isDesktop ? <Sidebar /> : null}
       {/* Main content scrolls while header/footer remain in view */}
       <div className="flex flex-col flex-1">
         <Header />
-        <main className="flex-1 overflow-auto sm:pb-16 sm:px-8">
+        <main className="flex-1 sm:pb-16 sm:px-8 h-full overflow-auto">
           <Outlet />
         </main>
       </div>
